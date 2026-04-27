@@ -14,7 +14,10 @@ class TakyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: WelcomeView.routeName,
       onGenerateRoute: onGenerateRoutes,
-      theme: ThemeData(fontFamily: 'Poppins'),
+      theme: ThemeData(
+        fontFamily: 'Poppins',
+        scaffoldBackgroundColor: Color(0xff181818),
+      ),
       title: 'Tasky ',
       debugShowCheckedModeBanner: false,
     );

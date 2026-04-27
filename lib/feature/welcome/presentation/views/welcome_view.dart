@@ -10,7 +10,6 @@ class WelcomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xff181818),
         body: WelcomeViewBody()
       ),
     );
