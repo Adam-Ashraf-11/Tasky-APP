@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tasky_app/core/helper/ongenerate_route.dart';
 import 'package:tasky_app/feature/welcome/presentation/views/welcome_view.dart';
 
 void main() {
@@ -11,10 +12,11 @@ class TakyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: WelcomeView.routeName,
+      onGenerateRoute: onGenerateRoutes,
       theme: ThemeData(fontFamily: 'Poppins'),
       title: 'Tasky ',
       debugShowCheckedModeBanner: false,
-      home: const WelcomeView(),
     );
   }
 }

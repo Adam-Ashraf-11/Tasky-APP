@@ -4,7 +4,8 @@ import 'package:tasky_app/feature/welcome/presentation/views/welcome_view_body.d
 
 class WelcomeView extends StatelessWidget {
   const WelcomeView({super.key});
-
+ 
+  static const routeName = 'welcomeView';
   @override
   Widget build(BuildContext context) {
     return const SafeArea(
