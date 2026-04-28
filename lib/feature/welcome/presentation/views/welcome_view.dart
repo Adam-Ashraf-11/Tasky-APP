@@ -8,10 +8,8 @@ class WelcomeView extends StatelessWidget {
   static const routeName = 'welcomeView';
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: Scaffold(
-        body: WelcomeViewBody()
-      ),
+    return const Scaffold(
+      body: SafeArea(child: WelcomeViewBody())
     );
   }
 }

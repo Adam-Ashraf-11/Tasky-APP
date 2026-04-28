@@ -9,6 +9,6 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       case HomeView.routeName:
       return MaterialPageRoute(builder: (_) => const HomeView());
     default:
-      return MaterialPageRoute(builder: (_) => Scaffold());
+      return MaterialPageRoute(builder: (_) => const Scaffold());
   }
 }

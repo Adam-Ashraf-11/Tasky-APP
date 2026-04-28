@@ -25,7 +25,7 @@ class WelcomeBottomSection extends StatelessWidget {
           const Gap(16),
            CustomTextFormFeild(
             validator: (value) {
-              if (value == null || value.isEmpty) {
+              if (value == null || value.trim().isEmpty) {
                 return 'Please enter your Full Name';
               }
               return null;
@@ -38,6 +38,7 @@ class WelcomeBottomSection extends StatelessWidget {
             w: MediaQuery.sizeOf(context).width,
             onPressed: () {
               if (formKey.currentState!.validate()) {
+                controller.clear();
                  Navigator.pushNamed(context, HomeView.routeName);
               }
              
