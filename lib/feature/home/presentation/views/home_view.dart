@@ -12,7 +12,7 @@ class HomeView extends StatelessWidget {
       floatingActionButton: CustomFloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, NewTaskView.routeName);
-        },
+        }, title: 'Add New Task',
       ),
       body: const SafeArea(child: HomeViewBody()),
     );

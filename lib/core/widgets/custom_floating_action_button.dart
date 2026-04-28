@@ -3,10 +3,11 @@ import 'package:tasky_app/core/constant/app_colors.dart';
 
 class CustomFloatingActionButton extends StatelessWidget {
   const CustomFloatingActionButton({
-    super.key, required this.onPressed,
+    super.key, required this.onPressed, required this.title,
   });
   
   final VoidCallback onPressed;
+  final String title ;
   @override
   Widget build(BuildContext context) {
     return  SizedBox(
@@ -19,7 +20,7 @@ class CustomFloatingActionButton extends StatelessWidget {
         foregroundColor: Colors.white,
         icon: const Icon(Icons.add),
         onPressed: onPressed,
-        label: const Text('Add New Task'),
+        label:  Text(title),
       ),
     );
   }
