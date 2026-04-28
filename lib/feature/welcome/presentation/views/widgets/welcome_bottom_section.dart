@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tasky_app/core/constant/constant.dart';
 import 'package:tasky_app/core/widgets/custom_eleveted_button.dart';
 import 'package:tasky_app/core/widgets/custom_text_form_feild.dart';
 import 'package:tasky_app/feature/home/presentation/views/home_view.dart';
@@ -30,16 +32,18 @@ class WelcomeBottomSection extends StatelessWidget {
               }
               return null;
             },
-            hint: 'e.g. Sarah Khalid' ,controller: controller ,),
+            hint: 'e.g. Sarah Khalid' ,
+            controller: controller,
+            ),
           const Gap(24),
           CustomElevetedButton(
-            
             title: 'Let’s Get Started',
             w: MediaQuery.sizeOf(context).width,
-            onPressed: () {
+            onPressed: () async{
               if (formKey.currentState!.validate()) {
-                controller.clear();
-                 Navigator.pushNamed(context, HomeView.routeName);
+                final pref =await SharedPreferences.getInstance();
+                await pref.setString(cUserName, controller.value.text);
+                 Navigator.pushReplacementNamed(context, HomeView.routeName);
               }
              
             },

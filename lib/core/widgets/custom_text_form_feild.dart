@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tasky_app/core/constant/app_colors.dart';
 
 class CustomTextFormFeild extends StatelessWidget {
-  const CustomTextFormFeild({super.key, required this.hint, this.controller, this.validator});
+  const CustomTextFormFeild({super.key, required this.hint, this.controller, this.validator, });
   final String hint;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
