@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -70,7 +71,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color:  const Color(0xff282828),
+                  color: const Color(0xff282828),
                 ),
                 child: Center(
                   child: Row(
@@ -79,23 +80,34 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         checkColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4),
-                        ) ,
+                        ),
                         activeColor: AppColors.green,
                         value: task[index].isDone ?? false,
-                         onChanged: (v){
-                        setState(() {
-                         task[index].isDone = v ;
-                       });
-                      }),
+                        onChanged: (v) async {
+                          log(v.toString());
+                          setState(() {
+                            task[index].isDone = v;
+                          });
+                          final pref = await SharedPreferences.getInstance();
+                          final updateTask = task.map((e) => e.toMap()).toList();
+                          await pref.setString('tasks', jsonEncode(updateTask));
+
+                        },
+                      ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             task[index].taskName,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
+                              decoration: ( task[index].isDone ?? false)
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                              decorationColor: Colors.red,
+                              decorationThickness: 5,
                             ),
                           ),
                           Text(
@@ -109,7 +121,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         ],
                       ),
                     ],
-                  )
+                  ),
                 ),
               ),
               itemCount: task.length,
@@ -140,4 +152,3 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     }
   }
 }
-
