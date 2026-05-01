@@ -76,6 +76,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 child: Center(
                   child: Row(
                     children: [
+                      const Gap(8),
                       Checkbox(
                         checkColor: Colors.white,
                         shape: RoundedRectangleBorder(
@@ -89,36 +90,46 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                             task[index].isDone = v;
                           });
                           final pref = await SharedPreferences.getInstance();
-                          final updateTask = task.map((e) => e.toMap()).toList();
+                          final updateTask = task
+                              .map((e) => e.toMap())
+                              .toList();
                           await pref.setString('tasks', jsonEncode(updateTask));
-
                         },
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            task[index].taskName,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              decoration: ( task[index].isDone ?? false)
-                                  ? TextDecoration.lineThrough
-                                  : TextDecoration.none,
-                              decorationColor: Colors.red,
-                              decorationThickness: 5,
+                      const Gap(8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              task[index].taskName,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                decoration: (task[index].isDone ?? false)
+                                    ? TextDecoration.lineThrough
+                                    : TextDecoration.none,
+                                decorationColor: Colors.red,
+                                decorationThickness: 5,
+                              ),
                             ),
-                          ),
-                          Text(
-                            task[index].taskDescription ?? '',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
+                            Text(
+                              task[index].taskDescription ?? '',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                      ),
+
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.more_vert),
                       ),
                     ],
                   ),
