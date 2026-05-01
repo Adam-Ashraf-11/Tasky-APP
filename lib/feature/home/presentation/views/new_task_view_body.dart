@@ -94,7 +94,7 @@ class _NewTaskViewBodyState extends State<NewTaskViewBody> {
               title: 'Add Task',
               w: MediaQuery.sizeOf(context).width,
               onPressed: () async {
-                if (formKey.currentState?.validate() ?? false) {
+                if (formKey.currentState!.validate()) {
                   final TaskModel taskModel = TaskModel(
                     taskName: taskNameController.text,
                     taskDescription: taskDescreptionController.text,
@@ -102,14 +102,14 @@ class _NewTaskViewBodyState extends State<NewTaskViewBody> {
                   );
                   final pref = await SharedPreferences.getInstance();
                   final taskJson = pref.getString('tasks');
-                  List<dynamic> listTasks = [];
+                   List<dynamic> listTasks = [];
                   if (taskJson != null) {
                     listTasks = jsonDecode(taskJson);
                   }
                   listTasks.add(taskModel.toMap()); // listTasks.add(task);
                   final taskEncode = jsonEncode(listTasks);
                   await pref.setString('tasks', taskEncode);
-                  Navigator.pop(context);
+                  Navigator.pop(context , true);
                 }
               },
             ),

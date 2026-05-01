@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tasky_app/core/constant/app_colors.dart';
 import 'package:tasky_app/core/constant/constant.dart';
 import 'package:tasky_app/feature/home/data/models/task_model.dart';
 
@@ -62,14 +63,54 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           ),
           Expanded(
             child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) => Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                margin: const EdgeInsets.symmetric(vertical: 10),
+                height: 56,
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(vertical: 8),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  color:  const Color(0xff282828),
                 ),
-                child: Center(child: Text(task[index].taskName)),
+                child: Center(
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        checkColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ) ,
+                        activeColor: AppColors.green,
+                        value: task[index].isDone ?? false,
+                         onChanged: (v){
+                        setState(() {
+                         task[index].isDone = v ;
+                       });
+                      }),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            task[index].taskName,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            task[index].taskDescription ?? '',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ),
               ),
               itemCount: task.length,
             ),
@@ -99,3 +140,4 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     }
   }
 }
+
