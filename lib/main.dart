@@ -8,8 +8,8 @@ import 'package:tasky_app/feature/welcome/presentation/views/welcome_view.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final pref = await SharedPreferences.getInstance();
-  pref.getString(cUserName);
-  runApp(const TakyApp(userName: cUserName));
+ String? savedUserName = pref.getString(cUserName);
+  runApp( TakyApp(userName: savedUserName));
 }
 
 class TakyApp extends StatelessWidget {
@@ -18,9 +18,9 @@ class TakyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: userName != null
-          ? HomeView.routeName
-          : WelcomeView.routeName,
+      initialRoute: userName == null
+          ?WelcomeView.routeName
+          :HomeView.routeName,
       onGenerateRoute: onGenerateRoutes,
       theme: ThemeData(
         fontFamily: 'Poppins',
