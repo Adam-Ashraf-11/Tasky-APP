@@ -5,6 +5,7 @@ import 'package:tasky_app/core/constant/constant.dart';
 import 'package:tasky_app/core/widgets/custom_eleveted_button.dart';
 import 'package:tasky_app/core/widgets/custom_text_form_feild.dart';
 import 'package:tasky_app/feature/home/presentation/views/home_view.dart';
+import 'package:tasky_app/feature/home/presentation/views/main_view.dart';
 
 class WelcomeBottomSection extends StatelessWidget {
  WelcomeBottomSection({super.key});
@@ -43,7 +44,7 @@ class WelcomeBottomSection extends StatelessWidget {
               if (formKey.currentState!.validate()) {
                 final pref =await SharedPreferences.getInstance();
                 await pref.setString(cUserName, controller.value.text);
-                 Navigator.pushReplacementNamed(context, HomeView.routeName);
+                 Navigator.pushReplacementNamed(context, MainView.routeName);
               }
              
             },

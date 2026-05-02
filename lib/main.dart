@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tasky_app/core/constant/constant.dart';
 import 'package:tasky_app/core/helper/ongenerate_route.dart';
-import 'package:tasky_app/feature/home/presentation/views/home_view.dart';
+import 'package:tasky_app/feature/home/presentation/views/main_view.dart';
 import 'package:tasky_app/feature/welcome/presentation/views/welcome_view.dart';
 
 void main() async {
@@ -20,7 +20,7 @@ class TakyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: userName == null
           ?WelcomeView.routeName
-          :HomeView.routeName,
+          :MainView.routeName,
       onGenerateRoute: onGenerateRoutes,
       theme: ThemeData(
         fontFamily: 'Poppins',

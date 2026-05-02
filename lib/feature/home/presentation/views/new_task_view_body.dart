@@ -56,12 +56,7 @@ class _NewTaskViewBodyState extends State<NewTaskViewBody> {
                     ),
                     const Gap(8),
                     CustomTextFormFeild(
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please Enter Task Description';
-                        }
-                        return null;
-                      },
+                     
                       hint: 'Enter Task Description',
                       controller: taskDescreptionController,
                       maxLines: 6,
