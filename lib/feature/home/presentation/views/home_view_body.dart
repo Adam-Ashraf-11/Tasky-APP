@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tasky_app/core/constant/app_colors.dart';
 import 'package:tasky_app/core/constant/constant.dart';
+import 'package:tasky_app/core/widgets/custom_floating_action_button.dart';
 import 'package:tasky_app/feature/home/data/models/task_model.dart';
+import 'package:tasky_app/feature/home/presentation/views/new_task_view.dart';
 
 class HomeViewBody extends StatefulWidget {
   const HomeViewBody({super.key});
@@ -22,7 +23,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   @override
   void initState() {
     addUserName();
-    _loadTasK();
+    loadTasK();
     super.initState();
   }
 
@@ -129,13 +130,29 @@ class _HomeViewBodyState extends State<HomeViewBody> {
 
                       IconButton(
                         onPressed: () {},
-                        icon: const Icon(Icons.more_vert),
+                        icon: Icon(
+                          Icons.more_vert,
+                          color: (task[index].isDone ?? true)
+                              ? Colors.grey
+                              : Colors.white,
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
               itemCount: task.length,
+            ),
+          ),
+
+          Align(
+            alignment: Alignment.bottomRight,
+            child: CustomFloatingActionButton(
+              onPressed: () async {
+                await Navigator.pushNamed(context, NewTaskView.routeName);
+                loadTasK();
+              },
+              title: 'Add New Task',
             ),
           ),
         ],
@@ -152,7 +169,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   } //usernam
 
   //! load task method
-  void _loadTasK() async {
+  void loadTasK() async {
     final pref = await SharedPreferences.getInstance();
     final getTask = pref.getString('tasks');
     if (getTask != null) {
