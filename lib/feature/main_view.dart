@@ -84,7 +84,7 @@ class _MainViewState extends State<MainView> {
           ),
         ],
       ),
-      body: screens[currentIndex],
+      body: SafeArea(child: screens[currentIndex]),
     );
   }
 }

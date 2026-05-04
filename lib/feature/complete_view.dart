@@ -25,36 +25,34 @@ class _CompleteViewState extends State<CompleteView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: customAppBar(title: ' Completed Tasks'),
-      body: SafeArea(
-        child: CustomTasksListView(
-          tasks: compeletetasks,
-          onTap: (bool? v, int index) async {
-             setState(() {
-                compeletetasks[index].isDone = v;
-              });
-              final pref = await SharedPreferences.getInstance();
-              final updateTask = compeletetasks.map((e) => e.toMap()).toList();
-
-              final allData = pref.getString('tasks');
-              if (allData != null) {
-                List<dynamic> allDataList = (jsonDecode(allData) as List).map((
-                  e,
-                ) {
-                  return TaskModel.fromJson(e);
-                }).toList();
-                final newIndex = allDataList.indexWhere(
-                  (e) => e.id == compeletetasks[index].id,
-                );
-                allDataList[newIndex] = compeletetasks[index];
-                await pref.setString(
-                  'tasks',
-                  jsonEncode(allDataList.map((e) => e.toMap()).toList()),
-                  
-                );
-             loadTasK();
-              }
-          }
-        ),
+      body: CustomTasksListView(
+        tasks: compeletetasks,
+        onTap: (bool? v, int index) async {
+           setState(() {
+              compeletetasks[index].isDone = v;
+            });
+            final pref = await SharedPreferences.getInstance();
+            final updateTask = compeletetasks.map((e) => e.toMap()).toList();
+      
+            final allData = pref.getString('tasks');
+            if (allData != null) {
+              List<dynamic> allDataList = (jsonDecode(allData) as List).map((
+                e,
+              ) {
+                return TaskModel.fromJson(e);
+              }).toList();
+              final newIndex = allDataList.indexWhere(
+                (e) => e.id == compeletetasks[index].id,
+              );
+              allDataList[newIndex] = compeletetasks[index];
+              await pref.setString(
+                'tasks',
+                jsonEncode(allDataList.map((e) => e.toMap()).toList()),
+                
+              );
+           loadTasK();
+            }
+        }
       ),
     );
   }
