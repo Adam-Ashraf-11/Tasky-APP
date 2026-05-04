@@ -4,8 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tasky_app/core/constant/constant.dart';
 import 'package:tasky_app/core/widgets/custom_eleveted_button.dart';
 import 'package:tasky_app/core/widgets/custom_text_form_feild.dart';
-import 'package:tasky_app/feature/home/presentation/views/home_view.dart';
-import 'package:tasky_app/feature/home/presentation/views/main_view.dart';
+import 'package:tasky_app/feature/main_view.dart';
 
 class WelcomeBottomSection extends StatelessWidget {
  WelcomeBottomSection({super.key});

@@ -90,17 +90,20 @@ class _NewTaskViewBodyState extends State<NewTaskViewBody> {
               w: MediaQuery.sizeOf(context).width,
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                  final TaskModel taskModel = TaskModel(
+                       final pref = await SharedPreferences.getInstance();
+                  final taskJson = pref.getString('tasks');
+                    List<dynamic> listTasks = [];
+                  if (taskJson != null) {
+                    listTasks = jsonDecode(taskJson);
+                  }
+                   TaskModel taskModel = TaskModel(
+                    id: listTasks.length + 1,
                     taskName: taskNameController.text,
                     taskDescription: taskDescreptionController.text,
                     isHighPriority: isHighPriority,
                   );
-                  final pref = await SharedPreferences.getInstance();
-                  final taskJson = pref.getString('tasks');
-                   List<dynamic> listTasks = [];
-                  if (taskJson != null) {
-                    listTasks = jsonDecode(taskJson);
-                  }
+             
+                 
                   listTasks.add(taskModel.toMap()); // listTasks.add(task);
                   final taskEncode = jsonEncode(listTasks);
                   await pref.setString('tasks', taskEncode);

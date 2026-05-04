@@ -1,11 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tasky_app/core/constant/app_colors.dart';
 import 'package:tasky_app/core/constant/constant.dart';
 import 'package:tasky_app/core/widgets/custom_floating_action_button.dart';
+import 'package:tasky_app/core/widgets/custom_tasks_list_view.dart';
 import 'package:tasky_app/feature/home/data/models/task_model.dart';
 import 'package:tasky_app/feature/home/presentation/views/new_task_view.dart';
 
@@ -34,6 +33,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       child: Stack(
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
@@ -65,109 +65,45 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   ),
                 ],
               ),
-              Expanded(
-                child: ListView.builder(
-                  padding:const EdgeInsets.only(bottom: 60),
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) => Container(
-                    height: 56,
-                    width: double.infinity,
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xff282828),
-                    ),
-                    child: Center(
-                      child: Row(
-                        children: [
-                          const Gap(8),
-                          Checkbox(
-                            checkColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            activeColor: AppColors.green,
-                            value: task[index].isDone ?? false,
-                            onChanged: (v) async {
-                              log(v.toString());
-                              setState(() {
-                                task[index].isDone = v;
-                              });
-                              final pref = await SharedPreferences.getInstance();
-                              final updateTask = task
-                                  .map((e) => e.toMap())
-                                  .toList();
-                              await pref.setString('tasks', jsonEncode(updateTask));
-                            },
-                          ),
-                          const Gap(8),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  task[index].taskName,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    decoration: (task[index].isDone ?? false)
-                                        ? TextDecoration.lineThrough
-                                        : TextDecoration.none,
-                                    decorationColor: Colors.red,
-                                    decorationThickness: 5,
-                                  ),
-                                ),
-                                if (task[index].taskDescription.isNotEmpty)
-                                Text(
-                                  task[index].taskDescription ,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-          
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.more_vert,
-                              color: (task[index].isDone ?? true)
-                                  ? Colors.grey
-                                  : Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  itemCount: task.length,
+              const Gap(20),
+              Text(
+                '$userName , Your Work is \nalmost Done !',
+                style: const TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
-          
-           
+              Expanded(
+                child: CustomTasksListView(
+                  tasks: task,
+                  onTap: (bool? value, int? index) async {
+                    setState(() {
+                      task[index!].isDone = value;
+                    });
+                    final pref = await SharedPreferences.getInstance();
+                    final updateTask = task.map((e) => e.toMap()).toList();
+                    await pref.setString('tasks', jsonEncode(updateTask));
+                  },
+                ),
+              ),
             ],
           ),
-             Positioned(
-               bottom: 16,
-               right: 0,
-               child: CustomFloatingActionButton(
-                  onPressed: () async {
-                   await Navigator.pushNamed(context, NewTaskView.routeName);
-                    loadTasK();
-                  },
-                  title: 'Add New Task',
-                ),
-             ),
+          Positioned(
+            bottom: 16,
+            right: 0,
+            child: CustomFloatingActionButton(
+              onPressed: () async {
+                await Navigator.pushNamed(context, NewTaskView.routeName);
+                loadTasK();
+              },
+              title: 'Add New Task',
+            ),
+          ),
         ],
       ),
     );
   }
-
   //! add user method
   void addUserName() async {
     final pref = await SharedPreferences.getInstance();
