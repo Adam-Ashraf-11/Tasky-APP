@@ -38,7 +38,6 @@ class _MainViewState extends State<MainView> {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColors.green,
         unselectedItemColor: Colors.grey,
-
         items: [
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
