@@ -1,0 +1,158 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
+import 'package:tasky_app/core/constant/app_colors.dart';
+import 'package:tasky_app/feature/high_priority_view.dart';
+
+class HighPriorityContainer extends StatelessWidget {
+  const HighPriorityContainer({
+    super.key,
+    required this.tasks,
+    required this.onTap,
+    required this.refrash,
+  });
+  final List<dynamic> tasks;
+  final Function(bool? v, int index) onTap;
+  final VoidCallback refrash;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        color: Color(0xff282828),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 16, top: 8),
+                  child: Text(
+                    'High Priority Tasks',
+                    style: TextStyle(
+                      color: AppColors.green,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                const Gap(8),
+                ListView.builder(
+                  itemCount:
+                      tasks.reversed.where((e) => e.isHighPriority).length > 4
+                      ? 4
+                      : tasks.reversed.where((e) => e.isHighPriority).length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final e = tasks.reversed
+                        .where((e) => e.isHighPriority)
+                        .take(4)
+                        .toList()[index];
+                    return Row(
+                      children: [
+                        Checkbox(
+                          checkColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          activeColor: AppColors.green,
+                          value: e.isDone ?? false,
+                          onChanged: (bool? v) {
+                            final index = tasks.indexWhere(
+                              (element) => element.id == e.id,
+                            );
+                            onTap(v, index);
+                          },
+                        ),
+                        Expanded(
+                          child: Text(
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            e.taskName,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              decoration: (e.isDone ?? false)
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                              decorationColor: Colors.red,
+                              decorationThickness: 5,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                // ...tasks
+                //     .reversed.where((e) => e.isHighPriority)
+                //     .take(4)
+                //     .map(
+                //       (e) => Row(
+                //         children: [
+                //           Checkbox(
+                //             checkColor: Colors.white,
+                //             shape: RoundedRectangleBorder(
+                //               borderRadius: BorderRadius.circular(4),
+                //             ),
+                //             activeColor: AppColors.green,
+                //             value: e.isDone??false,
+                //             onChanged: (bool? v) {
+                //               final index = tasks.indexWhere((element) => element.id == e.id);
+                //               onTap(v, index);
+                //             },
+                //           ),
+                //           Expanded(
+                //             child: Text(
+                //               maxLines: 1,
+                //               overflow: TextOverflow.ellipsis,
+                //               e.taskName,
+                //               style: TextStyle(
+                //                 fontSize: 16,
+                //                 fontWeight: FontWeight.bold,
+                //                 color: Colors.white,
+                //                 decoration: (e.isDone ?? false)
+                //                     ? TextDecoration.lineThrough
+                //                     : TextDecoration.none,
+                //                 decorationColor: Colors.red,
+                //                 decorationThickness: 5,
+                //               ),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: GestureDetector(
+              onTap: () async {
+                await Navigator.pushNamed(context, HighPriorityView.routeName);
+                refrash();
+              },
+              child: Container(
+                width: 55,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.transparent,
+                  border: Border.all(color: Colors.white),
+                ),
+                child: SvgPicture.asset('assets/images/arrow-up-right.svg'),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -45,6 +45,8 @@ class CustomTasksListView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       tasks[index].taskName,
                       style: TextStyle(
                         fontSize: 16,

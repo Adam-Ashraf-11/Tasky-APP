@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tasky_app/feature/high_priority_view.dart';
 import 'package:tasky_app/feature/home/presentation/views/home_view.dart';
 import 'package:tasky_app/feature/main_view.dart';
 import 'package:tasky_app/feature/home/presentation/views/new_task_view.dart';
@@ -17,6 +18,8 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const MainView());
       case TodoView.routeName:
       return MaterialPageRoute(builder: (_) => const TodoView());
+      case HighPriorityView.routeName:
+      return MaterialPageRoute(builder: (_) => const HighPriorityView());
     default:
       return MaterialPageRoute(builder: (_) => const Scaffold());
   }
