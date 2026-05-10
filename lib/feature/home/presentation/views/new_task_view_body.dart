@@ -1,9 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tasky_app/core/constant/app_colors.dart';
+import 'package:tasky_app/core/services/Preferences_server.dart';
+import 'package:tasky_app/core/utils/constant/app_colors.dart';
 import 'package:tasky_app/core/widgets/custom_eleveted_button.dart';
 import 'package:tasky_app/core/widgets/custom_text_form_feild.dart';
 import 'package:tasky_app/feature/home/data/models/task_model.dart';
@@ -90,8 +89,7 @@ class _NewTaskViewBodyState extends State<NewTaskViewBody> {
               w: MediaQuery.sizeOf(context).width,
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                       final pref = await SharedPreferences.getInstance();
-                  final taskJson = pref.getString('tasks');
+                  final taskJson = PreferencesServer().getString('tasks');
                     List<dynamic> listTasks = [];
                   if (taskJson != null) {
                     listTasks = jsonDecode(taskJson);
@@ -106,7 +104,7 @@ class _NewTaskViewBodyState extends State<NewTaskViewBody> {
                  
                   listTasks.add(taskModel.toMap()); // listTasks.add(task);
                   final taskEncode = jsonEncode(listTasks);
-                  await pref.setString('tasks', taskEncode);
+                  await PreferencesServer().setString('tasks', taskEncode);
                   Navigator.pop(context , true);
                 }
               },

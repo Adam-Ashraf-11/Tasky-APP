@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tasky_app/core/services/Preferences_server.dart';
 import 'package:tasky_app/core/widgets/custom_app_bar.dart';
 import 'package:tasky_app/core/widgets/custom_tasks_list_view.dart';
 import 'package:tasky_app/feature/home/data/models/task_model.dart';
@@ -21,8 +21,7 @@ class _TodoViewState extends State<TodoView> {
   }
   //! load task method
   void loadTasK() async {
-    final pref = await SharedPreferences.getInstance();
-    final getTask = pref.getString('tasks');
+    final getTask = PreferencesServer().getString('tasks');
     if (getTask != null) {
       final taskDeCoded = jsonDecode(getTask);
       setState(() {
@@ -47,9 +46,8 @@ class _TodoViewState extends State<TodoView> {
               setState(() {
                 todoTasks[index].isDone = v;
               });
-              final pref = await SharedPreferences.getInstance();
               final updateTask = todoTasks.map((e) => e.toMap()).toList();
-              final allData = pref.getString('tasks');
+              final allData = PreferencesServer().getString('tasks');
               if (allData != null) {
                 List<dynamic> allDataList = (jsonDecode(allData) as List).map((
                   e,
@@ -60,7 +58,7 @@ class _TodoViewState extends State<TodoView> {
                   (e) => e.id == todoTasks[index].id,
                 );
                 allDataList[newIndex] = todoTasks[index];
-                await pref.setString(
+                await PreferencesServer().setString(
                   'tasks',
                   jsonEncode(allDataList.map((e) => e.toMap()).toList()), 
                 );

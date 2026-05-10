@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:tasky_app/core/constant/app_colors.dart';
+import 'package:tasky_app/core/utils/constant/app_colors.dart';
 
 class CustomSliverTasksListView extends StatelessWidget {
   const CustomSliverTasksListView({

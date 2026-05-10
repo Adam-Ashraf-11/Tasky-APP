@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasky_app/core/constant/app_colors.dart';
+import 'package:tasky_app/core/utils/constant/app_colors.dart';
 
 class CustomTextFormFeild extends StatelessWidget {
   const CustomTextFormFeild({super.key, required this.hint, this.controller, this.validator, this.maxLines=1, });

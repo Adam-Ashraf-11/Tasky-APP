@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:tasky_app/core/constant/app_colors.dart';
+import 'package:tasky_app/core/utils/constant/app_colors.dart';
 import 'package:tasky_app/feature/high_priority_view.dart';
 
 class HighPriorityContainer extends StatelessWidget {

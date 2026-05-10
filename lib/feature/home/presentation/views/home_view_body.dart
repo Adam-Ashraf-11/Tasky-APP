@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tasky_app/core/constant/constant.dart';
+import 'package:tasky_app/core/services/Preferences_server.dart';
+import 'package:tasky_app/core/utils/constant/constant.dart';
 import 'package:tasky_app/core/widgets/custom_floating_action_button.dart';
 import 'package:tasky_app/core/widgets/custom_sliver_task_list.dart';
-import 'package:tasky_app/core/widgets/custom_tasks_list_view.dart';
 import 'package:tasky_app/feature/home/data/models/task_model.dart';
 import 'package:tasky_app/feature/home/presentation/views/new_task_view.dart';
 import 'package:tasky_app/feature/home/presentation/views/widget/archieved_tasks.dart';
@@ -35,16 +34,14 @@ class _HomeViewBodyState extends State<HomeViewBody> {
 
   //! add user method
   void addUserName() async {
-    final pref = await SharedPreferences.getInstance();
     setState(() {
-      userName = pref.getString(cUserName);
+      userName = PreferencesServer().getString(cUserName);
     });
   } //usernam
 
   //! load task method
   void loadTasK() async {
-    final pref = await SharedPreferences.getInstance();
-    final getTask = pref.getString('tasks');
+    final getTask = PreferencesServer().getString('tasks');
     if (getTask != null) {
       final taskDeCoded = jsonDecode(getTask);
       setState(() {
@@ -70,9 +67,8 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     setState(() {
       task[index].isDone = v;
     });
-    final pref = await SharedPreferences.getInstance();
     final updateTask = task.map((e) => e.toMap()).toList();
-    await pref.setString('tasks', jsonEncode(updateTask));
+    await PreferencesServer().setString('tasks', jsonEncode(updateTask));
     _calculatePercentage();
   }
 

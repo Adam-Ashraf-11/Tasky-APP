@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tasky_app/core/constant/app_colors.dart';
-import 'package:tasky_app/core/constant/constant.dart';
+import 'package:tasky_app/core/services/Preferences_server.dart';
+import 'package:tasky_app/core/utils/constant/app_colors.dart';
+import 'package:tasky_app/core/utils/constant/constant.dart';
 import 'package:tasky_app/core/widgets/custom_app_bar.dart';
+import 'package:tasky_app/feature/user_details_view.dart';
+import 'package:tasky_app/feature/welcome/presentation/views/welcome_view.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -14,6 +16,7 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   String? userName;
+  String? motivation;
   bool isDarkMode = true;
   @override
   void initState() {
@@ -23,9 +26,9 @@ class _ProfileViewState extends State<ProfileView> {
 
   //! add user method
   void addUserName() async {
-    final pref = await SharedPreferences.getInstance();
     setState(() {
-      userName = pref.getString(cUserName) ?? '';
+      userName = PreferencesServer().getString(cUserName) ?? '';
+      motivation = PreferencesServer().getString(cMotivation) ?? '';
     });
   }
 
@@ -72,9 +75,9 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
               ),
               const Gap(4),
-              const Text(
-                'One task at a time. One step closer.',
-                style: TextStyle(color: Colors.grey, fontSize: 14),
+              Text(
+                motivation ?? '',
+                style: const TextStyle(color: Colors.grey, fontSize: 14),
               ),
               const Gap(24),
               const Align(
@@ -85,11 +88,25 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
               ),
               const Gap(24),
-              const ListTile(
-                trailing: Icon(Icons.arrow_forward, color: Colors.white),
+              ListTile(
+                onTap: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserDetailsView(
+                        motivation: motivation,
+                        userName: userName,
+                      ),
+                    ),
+                  );
+                  if (result != null) {
+                    addUserName();
+                  }
+                },
+                trailing: const Icon(Icons.arrow_forward, color: Colors.white),
                 contentPadding: EdgeInsets.zero,
-                leading: Icon(Icons.person_outlined, color: Colors.white),
-                title: Text(
+                leading: const Icon(Icons.person_outlined, color: Colors.white),
+                title: const Text(
                   'User Details',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
@@ -117,11 +134,23 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
               ),
               const Divider(color: Colors.grey, thickness: 1),
-              const ListTile(
+              ListTile(
+                onTap: () async {
+                  await PreferencesServer().remove(cUserName);
+                  await PreferencesServer().remove(cMotivation);
+                  await PreferencesServer().remove('tasks');
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const WelcomeView(),
+                    ),
+                    (route) => false,
+                  );
+                },
                 contentPadding: EdgeInsets.zero,
-                leading: Icon(Icons.logout_outlined, color: Colors.white),
-                trailing: Icon(Icons.arrow_forward, color: Colors.white),
-                title: Text(
+                leading: const Icon(Icons.logout_outlined, color: Colors.white),
+                trailing: const Icon(Icons.arrow_forward, color: Colors.white),
+                title: const Text(
                   'Log Out',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),

@@ -4,22 +4,26 @@ import 'package:tasky_app/feature/home/presentation/views/home_view.dart';
 import 'package:tasky_app/feature/main_view.dart';
 import 'package:tasky_app/feature/home/presentation/views/new_task_view.dart';
 import 'package:tasky_app/feature/todo_view.dart';
+import 'package:tasky_app/feature/user_details_view.dart';
 import 'package:tasky_app/feature/welcome/presentation/views/welcome_view.dart';
 
 Route<dynamic> onGenerateRoutes(RouteSettings settings) {
   switch (settings.name) {
     case WelcomeView.routeName:
       return MaterialPageRoute(builder: (_) => const WelcomeView());
-      case HomeView.routeName:
+    case HomeView.routeName:
       return MaterialPageRoute(builder: (_) => const HomeView());
-      case NewTaskView.routeName:
+    case NewTaskView.routeName:
       return MaterialPageRoute(builder: (_) => const NewTaskView());
-      case MainView.routeName:
+    case MainView.routeName:
       return MaterialPageRoute(builder: (_) => const MainView());
-      case TodoView.routeName:
+    case TodoView.routeName:
       return MaterialPageRoute(builder: (_) => const TodoView());
-      case HighPriorityView.routeName:
+    case HighPriorityView.routeName:
       return MaterialPageRoute(builder: (_) => const HighPriorityView());
+    case UserDetailsView.routeName:
+      return MaterialPageRoute(builder: (_) => const UserDetailsView());
+
     default:
       return MaterialPageRoute(builder: (_) => const Scaffold());
   }

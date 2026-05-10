@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tasky_app/core/constant/constant.dart';
+import 'package:tasky_app/core/theme/light_theme.dart';
+import 'package:tasky_app/core/utils/constant/app_colors.dart';
+import 'package:tasky_app/core/utils/constant/constant.dart';
 import 'package:tasky_app/core/helper/ongenerate_route.dart';
+import 'package:tasky_app/core/services/Preferences_server.dart';
 import 'package:tasky_app/feature/main_view.dart';
 import 'package:tasky_app/feature/welcome/presentation/views/welcome_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final pref = await SharedPreferences.getInstance();
- String? savedUserName = pref.getString(cUserName);
+  await PreferencesServer().init();
+  String? savedUserName = PreferencesServer().getString(cUserName);   // final pref = await SharedPreferences.getInstance();
   runApp( TakyApp(userName: savedUserName));
 }
 
@@ -22,10 +24,7 @@ class TakyApp extends StatelessWidget {
           ?WelcomeView.routeName
           :MainView.routeName,
       onGenerateRoute: onGenerateRoutes,
-      theme: ThemeData(
-        fontFamily: 'Poppins',
-        scaffoldBackgroundColor: const Color(0xff181818),
-      ),
+      theme: lightTheme,
       title: 'Tasky ',
       debugShowCheckedModeBanner: false,
     );

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tasky_app/core/constant/constant.dart';
+import 'package:tasky_app/core/services/Preferences_server.dart';
+import 'package:tasky_app/core/utils/constant/constant.dart';
 import 'package:tasky_app/core/widgets/custom_eleveted_button.dart';
 import 'package:tasky_app/core/widgets/custom_text_form_feild.dart';
 import 'package:tasky_app/feature/main_view.dart';
@@ -41,8 +42,7 @@ class WelcomeBottomSection extends StatelessWidget {
             w: MediaQuery.sizeOf(context).width,
             onPressed: () async{
               if (formKey.currentState!.validate()) {
-                final pref =await SharedPreferences.getInstance();
-                await pref.setString(cUserName, controller.value.text);
+                await PreferencesServer().setString(cUserName, controller.value.text);
                  Navigator.pushReplacementNamed(context, MainView.routeName);
               }
              

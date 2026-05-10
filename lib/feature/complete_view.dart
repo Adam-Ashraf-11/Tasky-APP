@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tasky_app/core/services/Preferences_server.dart';
 import 'package:tasky_app/core/widgets/custom_app_bar.dart';
 import 'package:tasky_app/core/widgets/custom_tasks_list_view.dart';
 import 'package:tasky_app/feature/home/data/models/task_model.dart';
@@ -31,10 +32,8 @@ class _CompleteViewState extends State<CompleteView> {
            setState(() {
               compeletetasks[index].isDone = v;
             });
-            final pref = await SharedPreferences.getInstance();
-            final updateTask = compeletetasks.map((e) => e.toMap()).toList();
-      
-            final allData = pref.getString('tasks');
+            final updateTask = compeletetasks.map((e) => e.toMap()).toList();      
+            final allData = PreferencesServer().getString('tasks');
             if (allData != null) {
               List<dynamic> allDataList = (jsonDecode(allData) as List).map((
                 e,
@@ -45,7 +44,7 @@ class _CompleteViewState extends State<CompleteView> {
                 (e) => e.id == compeletetasks[index].id,
               );
               allDataList[newIndex] = compeletetasks[index];
-              await pref.setString(
+              await PreferencesServer().setString(
                 'tasks',
                 jsonEncode(allDataList.map((e) => e.toMap()).toList()),
                 
