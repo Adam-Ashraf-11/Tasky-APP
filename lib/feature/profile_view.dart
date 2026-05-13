@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:tasky_app/core/services/Preferences_server.dart';
+import 'package:tasky_app/core/theme/theme_controller.dart';
 import 'package:tasky_app/core/utils/constant/app_colors.dart';
 import 'package:tasky_app/core/utils/constant/constant.dart';
 import 'package:tasky_app/core/widgets/custom_app_bar.dart';
@@ -17,7 +18,6 @@ class ProfileView extends StatefulWidget {
 class _ProfileViewState extends State<ProfileView> {
   String? userName;
   String? motivation;
-  bool isDarkMode = true;
   @override
   void initState() {
     addUserName();
@@ -54,13 +54,17 @@ class _ProfileViewState extends State<ProfileView> {
                     backgroundColor: Colors.transparent,
                   ),
                   Container(
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 36, 36, 36),
+                    decoration:  BoxDecoration(
+                      border: Border.all(color: ThemeController().isLight() ? Colors. grey : Colors.transparent, width: 2),
+                      color: ThemeController().isLight() ? Colors.white : const Color(0xff282828),
                       shape: BoxShape.circle,
                     ),
-                    child: const IconButton(
+                    child:  IconButton(
                       onPressed: null,
-                      icon: Icon(Icons.camera_alt, color: Colors.white),
+                      icon: Icon(
+                        Icons.camera_alt_outlined, 
+                        color: ThemeController().isLight() ? Colors.black : Colors.white,
+                        ),
                     ),
                   ),
                 ],
@@ -68,23 +72,21 @@ class _ProfileViewState extends State<ProfileView> {
               const Gap(8),
               Text(
                 userName ?? '',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.displayMedium,
               ),
               const Gap(4),
               Text(
                 motivation ?? '',
-                style: const TextStyle(color: Colors.grey, fontSize: 14),
+                style: Theme.of(context).textTheme.displayMedium!.copyWith(color: 
+                ThemeController().isLight() ? Colors.black87 :
+                Colors.grey),
               ),
               const Gap(24),
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Profile Info',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  style: Theme.of(context).textTheme.labelLarge,
                 ),
               ),
               const Gap(24),
@@ -103,34 +105,41 @@ class _ProfileViewState extends State<ProfileView> {
                     addUserName();
                   }
                 },
-                trailing: const Icon(Icons.arrow_forward, color: Colors.white),
+                trailing: const Icon(
+                  Icons.arrow_forward,
+                ),
                 contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.person_outlined, color: Colors.white),
-                title: const Text(
+                leading: const Icon(
+                  Icons.person_outlined, 
+                ),
+                title: Text(
                   'User Details',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: Theme.of(context).textTheme.displayMedium,
                 ),
               ),
               const Divider(color: Colors.grey, thickness: 1),
               ListTile(
-                trailing: Switch(
-                  inactiveTrackColor: Colors.white,
-                  activeTrackColor: AppColors.green,
-                  value: isDarkMode,
-                  onChanged: (value) {
-                    setState(() {
-                      isDarkMode = value;
-                    });
+                trailing: ValueListenableBuilder(
+                  valueListenable: ThemeController.themeNotifier,
+
+                  builder: (BuildContext context, value, Widget? child) {
+                    return Switch(
+                      inactiveTrackColor: Colors.white,
+                      activeTrackColor: AppColors.green,
+                      value: value == ThemeMode.dark,
+                      onChanged: (value) async {
+                        ThemeController.toggleTheme();
+                      },
+                    );
                   },
                 ),
                 contentPadding: EdgeInsets.zero,
                 leading: const Icon(
                   Icons.dark_mode_outlined,
-                  color: Colors.white,
                 ),
-                title: const Text(
+                title: Text(
                   'Dark Mode',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: Theme.of(context).textTheme.displayMedium,
                 ),
               ),
               const Divider(color: Colors.grey, thickness: 1),
@@ -148,11 +157,15 @@ class _ProfileViewState extends State<ProfileView> {
                   );
                 },
                 contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.logout_outlined, color: Colors.white),
-                trailing: const Icon(Icons.arrow_forward, color: Colors.white),
-                title: const Text(
+                leading: const Icon(
+                  Icons.logout_outlined,
+                ),
+                trailing: const Icon(
+                  Icons.arrow_forward,
+                ),
+                title: Text(
                   'Log Out',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: Theme.of(context).textTheme.displayMedium,
                 ),
               ),
             ],

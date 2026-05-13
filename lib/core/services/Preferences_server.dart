@@ -24,4 +24,12 @@ class PreferencesServer {
   Future<void> remove(String key) async {
     await _sharedPreferences.remove(key);
   }
+
+  Future<void> setBool(String key, bool value) async {
+    await _sharedPreferences.setBool(key, value);
+  }
+
+  bool? getBool(String key) {
+    return _sharedPreferences.getBool(key);
+  }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tasky_app/core/services/Preferences_server.dart';
 import 'package:tasky_app/core/utils/constant/constant.dart';
 import 'package:tasky_app/core/widgets/custom_eleveted_button.dart';
@@ -8,44 +7,47 @@ import 'package:tasky_app/core/widgets/custom_text_form_feild.dart';
 import 'package:tasky_app/feature/main_view.dart';
 
 class WelcomeBottomSection extends StatelessWidget {
- WelcomeBottomSection({super.key});
-  
- final TextEditingController controller = TextEditingController();
- final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  WelcomeBottomSection({super.key});
+
+  final TextEditingController controller = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
       child: Column(
         children: [
-          const Align(
+          Align(
             alignment: Alignment.centerLeft,
             child: Text(
               'Full Name',
-              style: TextStyle(color: Colors.white, fontSize: 16),
+              style: Theme.of(context).textTheme.displaySmall,
             ),
           ),
           const Gap(16),
-           CustomTextFormFeild(
+          CustomTextFormFeild(
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
                 return 'Please enter your Full Name';
               }
               return null;
             },
-            hint: 'e.g. Sarah Khalid' ,
+            hint: 'e.g. Sarah Khalid',
             controller: controller,
-            ),
+          ),
           const Gap(24),
           CustomElevetedButton(
+          
             title: 'Let’s Get Started',
-            w: MediaQuery.sizeOf(context).width,
-            onPressed: () async{
+            
+            onPressed: () async {
               if (formKey.currentState!.validate()) {
-                await PreferencesServer().setString(cUserName, controller.value.text);
-                 Navigator.pushReplacementNamed(context, MainView.routeName);
+                await PreferencesServer().setString(
+                  cUserName,
+                  controller.value.text,
+                );
+                Navigator.pushReplacementNamed(context, MainView.routeName);
               }
-             
             },
           ),
         ],

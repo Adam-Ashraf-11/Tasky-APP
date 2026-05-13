@@ -77,8 +77,13 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     return Scaffold(
       floatingActionButton: CustomFloatingActionButton(
         onPressed: () async {
-          await Navigator.pushNamed(context, NewTaskView.routeName);
-          loadTasK();
+          var result = await Navigator.pushNamed(
+            context,
+            NewTaskView.routeName,
+          );
+          if (result == true) {
+            loadTasK();
+          }
         },
         title: 'Add New Task',
       ),
@@ -109,15 +114,13 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         children: [
                           Text(
                             'Good Evening,$userName',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                            style: Theme.of(context).textTheme.displayMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
                           ),
-                          const Text(
+                          Text(
                             'One task at a time.One step\n closer.',
-                            style: TextStyle(fontSize: 12, color: Colors.white),
+                            style: Theme.of(context).textTheme.displayMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -126,11 +129,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   const Gap(20),
                   Text(
                     '$userName , Your Work is \nalmost Done !',
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    style: Theme.of(context).textTheme.displayLarge,
                   ),
                   const Gap(20),
                   ArchievedTasks(
@@ -146,11 +145,11 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                       doneTask(v, index);
                     },
                   ),
-                                    const Gap(10),
+                  const Gap(10),
 
-                  const Text(
+                  Text(
                     'My Tasks',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                   const Gap(10),
                 ],

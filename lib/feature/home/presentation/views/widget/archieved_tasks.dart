@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:tasky_app/core/theme/theme_controller.dart';
 import 'package:tasky_app/core/utils/constant/app_colors.dart';
 
 class ArchievedTasks extends StatelessWidget {
@@ -14,29 +15,32 @@ class ArchievedTasks extends StatelessWidget {
   final int allTasks;
   final int completedTasks;
   final int percentage;
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       width: double.infinity,
       decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        border: Border.all(
+          color: ThemeController().isLight() ? Colors.grey : Colors.transparent,
+        ),
         borderRadius: BorderRadius.circular(20),
-        color: const Color(0xff282828),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
             children: [
-              const Text(
+              Text(
                 'Achieved Tasks',
-                style: TextStyle(color: Colors.white),
+                style: Theme.of(context).textTheme.displayMedium,
               ),
               const Gap(4),
               Text(
                 '$completedTasks Out of $allTasks Done',
-                style: const TextStyle(color: Colors.white),
+                style: Theme.of(context).textTheme.titleMedium,
               ),
             ],
           ),
@@ -60,11 +64,7 @@ class ArchievedTasks extends StatelessWidget {
               ),
               Text(
                 '$percentage%',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
+                style: Theme.of(context).textTheme.titleMedium,
               ),
             ],
           ),

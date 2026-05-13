@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:tasky_app/core/theme/theme_controller.dart';
 import 'package:tasky_app/core/utils/constant/app_colors.dart';
 import 'package:tasky_app/feature/high_priority_view.dart';
 
@@ -16,11 +17,17 @@ class HighPriorityContainer extends StatelessWidget {
   final VoidCallback refrash;
   @override
   Widget build(BuildContext context) {
+    // final highPriorityTasks = tasks.reversed.where((e) => e.isHighPriority).take(4).toList();
+    final bool hasMoreTasks =
+        tasks.reversed.where((e) => e.isHighPriority).length > 4;
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-        color: Color(0xff282828),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: ThemeController().isLight() ? Colors.grey : Colors.transparent,
+        ),
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,11 +64,6 @@ class HighPriorityContainer extends StatelessWidget {
                     return Row(
                       children: [
                         Checkbox(
-                          checkColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          activeColor: AppColors.green,
                           value: e.isDone ?? false,
                           onChanged: (bool? v) {
                             final index = tasks.indexWhere(
@@ -72,19 +74,12 @@ class HighPriorityContainer extends StatelessWidget {
                         ),
                         Expanded(
                           child: Text(
+                            e.taskName,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            e.taskName,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              decoration: (e.isDone ?? false)
-                                  ? TextDecoration.lineThrough
-                                  : TextDecoration.none,
-                              decorationColor: Colors.red,
-                              decorationThickness: 5,
-                            ),
+                            style: (e.isDone ?? false)
+                                ? Theme.of(context).textTheme.labelSmall
+                                : Theme.of(context).textTheme.labelMedium,
                           ),
                         ),
                       ],
@@ -132,6 +127,7 @@ class HighPriorityContainer extends StatelessWidget {
               ],
             ),
           ),
+          if (hasMoreTasks)
           Padding(
             padding: const EdgeInsets.all(16),
             child: GestureDetector(
@@ -145,9 +141,15 @@ class HighPriorityContainer extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.transparent,
-                  border: Border.all(color: Colors.white),
+                  border: Border.all(color: const Color(0xff6d6d6d)),
                 ),
-                child: SvgPicture.asset('assets/images/arrow-up-right.svg'),
+                child: SvgPicture.asset(
+                  'assets/images/arrow-up-right.svg',
+                  colorFilter: ColorFilter.mode(
+                    ThemeController().isLight() ? Colors.black : Colors.white,
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
             ),
           ),

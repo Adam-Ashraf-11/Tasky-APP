@@ -16,9 +16,10 @@ class _TodoViewState extends State<TodoView> {
   List<dynamic> todoTasks = [];
   @override
   void initState() {
-    loadTasK();
     super.initState();
+    loadTasK();
   }
+
   //! load task method
   void loadTasK() async {
     final getTask = PreferencesServer().getString('tasks');
@@ -29,10 +30,10 @@ class _TodoViewState extends State<TodoView> {
             .map((e) => TaskModel.fromJson(e))
             .where((element) => element.isDone == false)
             .toList();
-            
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,25 +45,36 @@ class _TodoViewState extends State<TodoView> {
             tasks: todoTasks,
             onTap: (bool? v, int index) async {
               setState(() {
-                todoTasks[index].isDone = v;
+                todoTasks[index].isDone = v ?? false;
               });
-              final updateTask = todoTasks.map((e) => e.toMap()).toList();
               final allData = PreferencesServer().getString('tasks');
               if (allData != null) {
                 List<dynamic> allDataList = (jsonDecode(allData) as List).map((
                   e,
-                ){
-                 return TaskModel.fromJson(e);
+                ) {
+                  return TaskModel.fromJson(e);
                 }).toList();
-                final newIndex = allDataList.indexWhere(
-                  (e) => e.id == todoTasks[index].id,
-                );
-                allDataList[newIndex] = todoTasks[index];
-                await PreferencesServer().setString(
-                  'tasks',
-                  jsonEncode(allDataList.map((e) => e.toMap()).toList()), 
-                );
-             loadTasK();
+
+                final targetId = todoTasks[index].id;
+                final dbIndex = allDataList.indexWhere((e) => e.id == targetId);
+
+                if (dbIndex != -1) {
+                  allDataList[dbIndex].isDone = v ?? false;
+                  await PreferencesServer().setString(
+                    'tasks',
+                    jsonEncode(allDataList.map((e) => e.toMap()).toList()),
+                  );
+                }
+                loadTasK();
+                // final newIndex = allDataList.indexWhere(
+                //   (e) => e.id == todoTasks[index].id,
+                // );
+                // allDataList[newIndex] = todoTasks[index];
+                // await PreferencesServer().setString(
+                //   'tasks',
+                //   jsonEncode(allDataList.map((e) => e.toMap()).toList()),
+                // );
+                // loadTasK();
               }
             },
           ),
@@ -70,5 +82,4 @@ class _TodoViewState extends State<TodoView> {
       ),
     );
   }
-
 }

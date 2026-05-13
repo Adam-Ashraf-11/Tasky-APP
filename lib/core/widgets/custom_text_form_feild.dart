@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:tasky_app/core/utils/constant/app_colors.dart';
 
 class CustomTextFormFeild extends StatelessWidget {
-  const CustomTextFormFeild({super.key, required this.hint, this.controller, this.validator, this.maxLines=1, });
+  const CustomTextFormFeild({
+    super.key,
+    required this.hint,
+    this.controller,
+    this.validator,
+    this.maxLines = 1,
+  });
   final String hint;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
@@ -11,20 +17,15 @@ class CustomTextFormFeild extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       maxLines: maxLines,
-      validator:validator ,
-      controller:controller ,
-      style: const TextStyle(color: Colors.white),
-      onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+      validator: validator,
+      style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
       cursorColor: AppColors.green,
+      controller: controller,
+      onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: Colors.grey),
-        filled: true,
-        fillColor: const Color(0xff282828),
-        border: OutlineInputBorder(
-          borderSide:  BorderSide.none,
-          borderRadius: BorderRadius.circular(16),
-        ),
+        hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: const Color(0xff9E9E9E)),
+     
       ),
     );
   }

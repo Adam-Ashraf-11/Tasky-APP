@@ -16,10 +16,10 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   List<Widget> screens = const [
-     HomeView(),
-     TodoView(),
-     CompleteView(),
-     ProfileView(),
+    HomeView(),
+    TodoView(),
+    CompleteView(),
+    ProfileView(),
   ];
 
   int currentIndex = 0;
@@ -34,56 +34,35 @@ class _MainViewState extends State<MainView> {
           });
         },
         currentIndex: currentIndex,
-        backgroundColor: const Color(0xff181818),
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppColors.green,
-        unselectedItemColor: Colors.grey,
         items: [
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/images/home_icon.svg',
-              colorFilter: ColorFilter.mode(
-                currentIndex == 0 ? AppColors.green : Colors.white,
-                BlendMode.srcIn,
-              ),
-            ),
-
+            icon: _buildSvg('assets/images/home_icon.svg', 0),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/images/todo_icon.svg',
-
-              colorFilter: ColorFilter.mode(
-                currentIndex == 1 ? AppColors.green : Colors.white,
-                BlendMode.srcIn,
-              ),
-            ),
+            icon: _buildSvg('assets/images/todo_icon.svg', 1),
             label: 'To Do',
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/images/complete_icon.svg',
-              colorFilter: ColorFilter.mode(
-                currentIndex == 2 ? AppColors.green : Colors.white,
-                BlendMode.srcIn,
-              ),
-            ),
+            icon: _buildSvg('assets/images/complete_icon.svg', 2),
             label: 'Complete',
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/images/profile_icon.svg',
-              colorFilter: ColorFilter.mode(
-                currentIndex == 3 ? AppColors.green : Colors.white,
-                BlendMode.srcIn,
-              ),
-            ),
+            icon: _buildSvg('assets/images/profile_icon.svg', 3),
             label: 'Profile',
           ),
         ],
       ),
       body: SafeArea(child: screens[currentIndex]),
+    );
+  }
+  SvgPicture _buildSvg(String path, index) {
+    return SvgPicture.asset(
+      path,
+      colorFilter: ColorFilter.mode(
+        currentIndex == index ? AppColors.green : Colors.grey,
+        BlendMode.srcIn,
+      ),
     );
   }
 }

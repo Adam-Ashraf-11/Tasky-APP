@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:tasky_app/core/services/Preferences_server.dart';
-import 'package:tasky_app/core/utils/constant/app_colors.dart';
 import 'package:tasky_app/core/widgets/custom_eleveted_button.dart';
 import 'package:tasky_app/core/widgets/custom_text_form_feild.dart';
 import 'package:tasky_app/feature/home/data/models/task_model.dart';
@@ -55,7 +54,6 @@ class _NewTaskViewBodyState extends State<NewTaskViewBody> {
                     ),
                     const Gap(8),
                     CustomTextFormFeild(
-                     
                       hint: 'Enter Task Description',
                       controller: taskDescreptionController,
                       maxLines: 6,
@@ -64,13 +62,14 @@ class _NewTaskViewBodyState extends State<NewTaskViewBody> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                         Text(
                           'High Priority  ',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
+                          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold
+                          ),
                         ),
                         Switch(
-                          inactiveTrackColor: Colors.grey,
-                          activeTrackColor: AppColors.green,
                           value: isHighPriority,
                           onChanged: (bool value) {
                             setState(() {
@@ -86,26 +85,25 @@ class _NewTaskViewBodyState extends State<NewTaskViewBody> {
             ),
             CustomElevetedButton(
               title: 'Add Task',
-              w: MediaQuery.sizeOf(context).width,
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
                   final taskJson = PreferencesServer().getString('tasks');
-                    List<dynamic> listTasks = [];
+                  List<dynamic> listTasks = [];
                   if (taskJson != null) {
                     listTasks = jsonDecode(taskJson);
                   }
-                   TaskModel taskModel = TaskModel(
-                    id: listTasks.length + 1,
+                  TaskModel taskModel = TaskModel(
+                    id: DateTime.now().millisecondsSinceEpoch,
                     taskName: taskNameController.text,
                     taskDescription: taskDescreptionController.text,
                     isHighPriority: isHighPriority,
+                    isDone: false,
                   );
-             
-                 
+
                   listTasks.add(taskModel.toMap()); // listTasks.add(task);
                   final taskEncode = jsonEncode(listTasks);
                   await PreferencesServer().setString('tasks', taskEncode);
-                  Navigator.pop(context , true);
+                  Navigator.pop(context, true);
                 }
               },
             ),
