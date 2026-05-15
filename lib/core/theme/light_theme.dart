@@ -8,7 +8,6 @@ ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   scaffoldBackgroundColor: AppColors.light,
   colorScheme: const ColorScheme.light(primaryContainer: Colors.white),
-
   iconTheme: const IconThemeData(color: Colors.black),
   //!  AppBar
   appBarTheme: const AppBarTheme(
@@ -23,7 +22,6 @@ ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.bold,
     ),
   ),
-
   //! ElevatedButton
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
@@ -35,12 +33,10 @@ ThemeData lightTheme = ThemeData(
       fixedSize: const Size(double.infinity, 40),
     ),
   ),
-
   //! TextField
   inputDecorationTheme: InputDecorationTheme(
-       filled: true,
+    filled: true,
     fillColor: Colors.white,
-    
     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(16),
@@ -55,12 +51,10 @@ ThemeData lightTheme = ThemeData(
       borderSide: const BorderSide(color: Color(0xFF16b86d), width: 2),
     ),
     errorBorder: OutlineInputBorder(
-      
       borderRadius: BorderRadius.circular(16),
       borderSide: const BorderSide(color: Colors.red),
     ),
   ),
-
   //! Text Theme
   textTheme: const TextTheme(
     //?  Small....
@@ -132,14 +126,16 @@ ThemeData lightTheme = ThemeData(
   ),
   //! Switch Theme
   switchTheme: SwitchThemeData(
-    trackOutlineColor: WidgetStateProperty.all(Colors.grey) ,
-    thumbColor: WidgetStateProperty.all(Colors.grey),
+    trackOutlineColor: WidgetStateProperty.all(Colors.grey),
+    thumbColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) return Colors.white;
+      return Colors.grey;
+    }), 
     trackColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) return const Color(0xFF16b86d);
       return Colors.grey.shade300;
     }),
   ),
-
   //! Checkbox Theme
   checkboxTheme: CheckboxThemeData(
     checkColor: WidgetStateProperty.all(Colors.white),
@@ -160,36 +156,40 @@ ThemeData lightTheme = ThemeData(
       );
     }),
   ),
-
   //! FloatingActionButton Theme
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-
     backgroundColor: Color(0xFF16b86d),
     foregroundColor: Colors.white,
     extendedTextStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
   ),
-
-bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-  backgroundColor: AppColors.light,
-  type: BottomNavigationBarType.fixed,
-  selectedItemColor: AppColors.green,
-  unselectedItemColor: Colors.black,
+  //! Bottom Navigation Bar Theme
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    backgroundColor: AppColors.light,
+    type: BottomNavigationBarType.fixed,
+    selectedItemColor: AppColors.green,
+    unselectedItemColor: Colors.black,
+  ),
+  
+   //! TextButton Theme
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(foregroundColor: Colors.black),
+  ),
  
-),
-splashFactory: NoSplash.splashFactory,
-primaryIconTheme: const IconThemeData(
-  color: Colors.black
-)
+  //! Splash Factory Theme
+  splashFactory: NoSplash.splashFactory,
+  //! Icon Theme
+  primaryIconTheme: const IconThemeData(color: Colors.black),
+    //! popupMenu Theme
+  popupMenuTheme: PopupMenuThemeData(
+    
+    color:  Colors.white,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(16)),
+      side: BorderSide(color: Colors.grey, width: 1),
+    ),
+    elevation: 10,
+    labelTextStyle: WidgetStateProperty.all(
+      const TextStyle(color: Colors.black, fontSize: 14),
+    ),
+  ),
 );
-
- 
- //* app color scheme
-  // colorScheme: const ColorScheme.light(
-  //   onPrimary: Colors.white,
-  //   secondary: Color(0xFF16b86d),
-  //   surface: Colors.white,
-  //   background: Colors.white,
-  //   error: Colors.red,
-  // ),
-
-

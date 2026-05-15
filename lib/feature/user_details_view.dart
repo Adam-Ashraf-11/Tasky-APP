@@ -42,9 +42,9 @@ class _UserDetailsViewState extends State<UserDetailsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Gap(20),
-              const Text(
+               Text(
                 'User Name',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: Theme.of(context).textTheme.displayMedium,
               ),
               const Gap(20),
 
@@ -59,9 +59,9 @@ class _UserDetailsViewState extends State<UserDetailsView> {
                 controller: userNameController,
               ),
               const Gap(20),
-              const Text(
+               Text(
                 'Motivation Quote',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: Theme.of(context).textTheme.displayMedium,
               ),
               const Gap(20),
               CustomTextFormFeild(

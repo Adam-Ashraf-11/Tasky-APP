@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:tasky_app/core/services/Preferences_server.dart';
 import 'package:tasky_app/core/theme/theme_controller.dart';
 import 'package:tasky_app/core/utils/constant/app_colors.dart';
@@ -18,6 +22,7 @@ class ProfileView extends StatefulWidget {
 class _ProfileViewState extends State<ProfileView> {
   String? userName;
   String? motivation;
+  String? imagePath;
   @override
   void initState() {
     addUserName();
@@ -29,6 +34,7 @@ class _ProfileViewState extends State<ProfileView> {
     setState(() {
       userName = PreferencesServer().getString(cUserName) ?? '';
       motivation = PreferencesServer().getString(cMotivation) ?? '';
+      imagePath = PreferencesServer().getString(cUserImage);
     });
   }
 
@@ -48,23 +54,41 @@ class _ProfileViewState extends State<ProfileView> {
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  const CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/Thumbnail.png'),
+                  CircleAvatar(
+                    backgroundImage: imagePath != null
+                        ? FileImage(File(imagePath!))
+                        : const AssetImage('assets/images/Thumbnail.png'),
                     radius: 60,
                     backgroundColor: Colors.transparent,
                   ),
                   Container(
-                    decoration:  BoxDecoration(
-                      border: Border.all(color: ThemeController().isLight() ? Colors. grey : Colors.transparent, width: 2),
-                      color: ThemeController().isLight() ? Colors.white : const Color(0xff282828),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: ThemeController().isLight()
+                            ? Colors.grey.shade400
+                            : Colors.transparent,
+                        width: 2,
+                      ),
+                      color: ThemeController().isLight()
+                          ? Colors.white
+                          : const Color(0xff282828),
                       shape: BoxShape.circle,
                     ),
-                    child:  IconButton(
-                      onPressed: null,
+                    child: IconButton(
                       icon: Icon(
-                        Icons.camera_alt_outlined, 
-                        color: ThemeController().isLight() ? Colors.black : Colors.white,
-                        ),
+                        Icons.camera_alt_outlined,
+                        color: ThemeController().isLight()
+                            ? Colors.black87
+                            : Colors.white,
+                      ),
+                      onPressed: () async {
+                        showImageSourceDialog(context, (XFile file){
+                          saveImage(file);
+                          setState(() {
+                            imagePath = file.path;
+                          });
+                        });
+                      },
                     ),
                   ),
                 ],
@@ -77,9 +101,11 @@ class _ProfileViewState extends State<ProfileView> {
               const Gap(4),
               Text(
                 motivation ?? '',
-                style: Theme.of(context).textTheme.displayMedium!.copyWith(color: 
-                ThemeController().isLight() ? Colors.black87 :
-                Colors.grey),
+                style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                  color: ThemeController().isLight()
+                      ? Colors.black87
+                      : Colors.grey,
+                ),
               ),
               const Gap(24),
               Align(
@@ -105,13 +131,9 @@ class _ProfileViewState extends State<ProfileView> {
                     addUserName();
                   }
                 },
-                trailing: const Icon(
-                  Icons.arrow_forward,
-                ),
+                trailing: const Icon(Icons.arrow_forward),
                 contentPadding: EdgeInsets.zero,
-                leading: const Icon(
-                  Icons.person_outlined, 
-                ),
+                leading: const Icon(Icons.person_outlined),
                 title: Text(
                   'User Details',
                   style: Theme.of(context).textTheme.displayMedium,
@@ -134,9 +156,7 @@ class _ProfileViewState extends State<ProfileView> {
                   },
                 ),
                 contentPadding: EdgeInsets.zero,
-                leading: const Icon(
-                  Icons.dark_mode_outlined,
-                ),
+                leading: const Icon(Icons.dark_mode_outlined),
                 title: Text(
                   'Dark Mode',
                   style: Theme.of(context).textTheme.displayMedium,
@@ -157,12 +177,8 @@ class _ProfileViewState extends State<ProfileView> {
                   );
                 },
                 contentPadding: EdgeInsets.zero,
-                leading: const Icon(
-                  Icons.logout_outlined,
-                ),
-                trailing: const Icon(
-                  Icons.arrow_forward,
-                ),
+                leading: const Icon(Icons.logout_outlined),
+                trailing: const Icon(Icons.arrow_forward),
                 title: Text(
                   'Log Out',
                   style: Theme.of(context).textTheme.displayMedium,
@@ -174,4 +190,62 @@ class _ProfileViewState extends State<ProfileView> {
       ),
     );
   }
+
+  void showImageSourceDialog(BuildContext context, Function(XFile)  selectedFile) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          contentPadding: const EdgeInsetsGeometry.all(8),
+
+          title: const Text('Select Image Source'),
+          children: [
+            SimpleDialogOption(
+              child: const Row(
+                children: [
+                  Icon(Icons.camera_alt_outlined),
+                  Gap(8),
+                  Text('Camera'),
+                ],
+              ),
+              onPressed: () async {
+                Navigator.pop(context);
+                XFile? image = await ImagePicker().pickImage(
+                  source: ImageSource.camera,
+                );
+                if (image != null) {
+                  selectedFile(image);
+                }
+                
+              },
+            ),
+            SimpleDialogOption(
+              child: const Row(
+                children: [Icon(Icons.photo_library), Gap(8), Text('Gallery')],
+              ),
+              onPressed: () async {
+                 Navigator.pop(context);
+                XFile? image = await ImagePicker().pickImage(
+                  source: ImageSource.gallery,
+                );
+
+                if (image != null) {
+                 selectedFile(image);
+                }
+               
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  
+   saveImage(XFile file) async {
+  final appImage = await getApplicationDocumentsDirectory();
+ final newFile = await File(file.path).copy('${appImage.path}/${file.name}');
+  
+ PreferencesServer().setString(cUserImage, newFile.path);
+
+   }
 }

@@ -32,9 +32,9 @@ class _NewTaskViewBodyState extends State<NewTaskViewBody> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                     Text(
                       'Task Name',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: Theme.of(context).textTheme.displayMedium,
                     ),
                     const Gap(8),
                     CustomTextFormFeild(
@@ -48,9 +48,9 @@ class _NewTaskViewBodyState extends State<NewTaskViewBody> {
                       controller: taskNameController,
                     ),
                     const Gap(20),
-                    const Text(
+                     Text(
                       'Task Description',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: Theme.of(context).textTheme.displayMedium,
                     ),
                     const Gap(8),
                     CustomTextFormFeild(
@@ -93,7 +93,7 @@ class _NewTaskViewBodyState extends State<NewTaskViewBody> {
                     listTasks = jsonDecode(taskJson);
                   }
                   TaskModel taskModel = TaskModel(
-                    id: DateTime.now().millisecondsSinceEpoch,
+                    id: listTasks.length + 1,
                     taskName: taskNameController.text,
                     taskDescription: taskDescreptionController.text,
                     isHighPriority: isHighPriority,

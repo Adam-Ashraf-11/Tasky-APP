@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:tasky_app/core/services/Preferences_server.dart';
@@ -21,7 +22,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   String? userName;
 
   List<dynamic> task = [];
-
+  String? userImage;
   int completedTasks = 0;
   int allTasks = 0;
   int percentage = 0;
@@ -36,9 +37,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   void addUserName() async {
     setState(() {
       userName = PreferencesServer().getString(cUserName);
+      userImage = PreferencesServer().getString(cUserImage);
     });
   } //usernam
-
   //! load task method
   void loadTasK() async {
     final getTask = PreferencesServer().getString('tasks');
@@ -66,10 +67,20 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   doneTask(bool? v, int index) async {
     setState(() {
       task[index].isDone = v;
+      _calculatePercentage();
     });
     final updateTask = task.map((e) => e.toMap()).toList();
     await PreferencesServer().setString('tasks', jsonEncode(updateTask));
-    _calculatePercentage();
+  }
+
+  deleteTask(int? id) async {
+    if (id == null) return;
+    setState(() {
+      task.removeWhere((element) => element.id == id);
+      _calculatePercentage();
+    });
+    final updateTask = task.map((e) => e.toMap()).toList();
+    await PreferencesServer().setString('tasks', jsonEncode(updateTask));
   }
 
   @override
@@ -98,15 +109,11 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 children: [
                   Row(
                     children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(200),
-                        ),
-                        child: Image.asset(
-                          'assets/images/Thumbnail.png',
-                          width: 50,
-                          height: 50,
-                        ),
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundImage: (userImage != null)
+                            ? FileImage(File(userImage!))
+                            : const AssetImage('assets/images/Thumbnail.png'),
                       ),
                       const Gap(10),
                       Column(
@@ -146,7 +153,6 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                     },
                   ),
                   const Gap(10),
-
                   Text(
                     'My Tasks',
                     style: Theme.of(context).textTheme.labelLarge,
@@ -159,6 +165,12 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               tasks: task,
               onTap: (bool? value, int? index) {
                 doneTask(value, index!);
+              },
+              onDelet: (int? id) {
+                deleteTask(id);
+              },
+              edit: () {
+                loadTasK();
               },
             ),
           ],

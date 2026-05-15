@@ -32,11 +32,15 @@ ThemeData darkTheme = ThemeData(
       fixedSize: const Size(double.infinity, 40),
     ),
   ),
+  //! TextButton Theme
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(foregroundColor: Colors.white),
+  ),
   //! TextField
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
     fillColor: const Color(0xFF282828),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 16 , vertical: 16),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(16),
       borderSide: BorderSide.none,
@@ -71,7 +75,6 @@ ThemeData darkTheme = ThemeData(
       );
     }),
   ),
-
   //! Text Theme
   textTheme: const TextTheme(
     //? display....
@@ -146,7 +149,10 @@ ThemeData darkTheme = ThemeData(
   ),
   //! Switch Theme
   switchTheme: SwitchThemeData(
-    thumbColor: WidgetStateProperty.all(Colors.white),
+    thumbColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) return Colors.white;
+      return Colors.grey;
+    }),
     trackColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) return const Color(0xFF16b86d);
       return Colors.grey.shade300;
@@ -158,22 +164,24 @@ ThemeData darkTheme = ThemeData(
     foregroundColor: Colors.white,
     extendedTextStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
   ),
-
   primaryIconTheme: const IconThemeData(color: Colors.white),
-
+  //! Bottom Navigation Bar Theme
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: AppColors.dark,
     type: BottomNavigationBarType.fixed,
   ),
+  //! Splash Factory Theme
   splashFactory: NoSplash.splashFactory,
+  //! popupMenu Theme
+  popupMenuTheme: PopupMenuThemeData(
+    color: const Color(0xFF181818),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(16)),
+      side: BorderSide(color: AppColors.green, width: 1),
+    ),
+    elevation: 10,
+    labelTextStyle: WidgetStateProperty.all(
+      const TextStyle(color: Colors.white, fontSize: 14),
+    ),
+  ),
 );
-
- //! app color scheme
-  // colorScheme: const ColorScheme.light(
-  //   onPrimary: Colors.white,
-  //   secondary: Color(0xFF16b86d),
-  //   surface: Colors.white,
-  //   background: Colors.white,
-  //   error: Colors.red,
-  // ),
-

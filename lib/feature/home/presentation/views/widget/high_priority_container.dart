@@ -21,6 +21,7 @@ class HighPriorityContainer extends StatelessWidget {
     final bool hasMoreTasks =
         tasks.reversed.where((e) => e.isHighPriority).length > 4;
     return Container(
+      padding: EdgeInsets.all( !hasMoreTasks ? 8 : 0),
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(

@@ -34,6 +34,21 @@ class _TodoViewState extends State<TodoView> {
     }
   }
 
+   deleteTask(int? id) async {
+    List<dynamic> tasks = [];
+    final getTask = PreferencesServer().getString('tasks');
+    if (getTask != null) {
+      final taskDeCoded = jsonDecode(getTask) as List<dynamic>;
+      tasks = taskDeCoded.map((e) => TaskModel.fromJson(e)).toList();
+      tasks.removeWhere((element) => element.id == id);
+      if (id == null) return;
+      setState(() {
+        todoTasks.removeWhere((element) => element.id == id);
+      });
+      final updateTask = tasks.map((e) => e.toMap()).toList();
+       PreferencesServer().setString('tasks', jsonEncode(updateTask));
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,10 +69,8 @@ class _TodoViewState extends State<TodoView> {
                 ) {
                   return TaskModel.fromJson(e);
                 }).toList();
-
                 final targetId = todoTasks[index].id;
                 final dbIndex = allDataList.indexWhere((e) => e.id == targetId);
-
                 if (dbIndex != -1) {
                   allDataList[dbIndex].isDone = v ?? false;
                   await PreferencesServer().setString(
@@ -76,6 +89,9 @@ class _TodoViewState extends State<TodoView> {
                 // );
                 // loadTasK();
               }
+            },
+            onDelet: (int? id) => deleteTask(id), edit: (){
+              loadTasK();
             },
           ),
         ),

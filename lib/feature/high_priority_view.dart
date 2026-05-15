@@ -38,39 +38,61 @@ class _HighPriorityViewState extends State<HighPriorityView> {
     }
   }
 
+  deleteTask(int? id) async {
+    List<dynamic> tasks = [];
+    final getTask = PreferencesServer().getString('tasks');
+    if (getTask != null) {
+      final taskDeCoded = jsonDecode(getTask) as List<dynamic>;
+      tasks = taskDeCoded.map((e) => TaskModel.fromJson(e)).toList();
+      tasks.removeWhere((element) => element.id == id);
+      if (id == null) return;
+      setState(() {
+        task.removeWhere((element) => element.id == id);
+      });
+      final updateTask = tasks.map((e) => e.toMap()).toList();
+       PreferencesServer().setString('tasks', jsonEncode(updateTask));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: customAppBar(title: 'High Priority Tasks'),
-    
-    body:  Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: CustomTasksListView(
-            tasks: task,
-            onTap: (bool? v, int index) async {
-              setState(() {
-                task[index].isDone = v;
-              });
-              final updateTask = task.map((e) => e.toMap()).toList();
-              final allData = PreferencesServer().getString('tasks');
-              if (allData != null) {
-                List<dynamic> allDataList = (jsonDecode(allData) as List).map((
-                  e,
-                ){
-                 return TaskModel.fromJson(e);
-                }).toList();
-                final newIndex = allDataList.indexWhere(
-                  (e) => e.id == task[index].id,
-                );
-                allDataList[newIndex] = task[index];
-                await PreferencesServer().setString(
-                  'tasks',
-                  jsonEncode(allDataList.map((e) => e.toMap()).toList()), 
-                );
-             loadTasK();
-              }
-            },
-          ),
+    return Scaffold(
+      appBar: customAppBar(title: 'High Priority Tasks'),
+
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: CustomTasksListView(
+          tasks: task,
+          onTap: (bool? v, int index) async {
+            setState(() {
+              task[index].isDone = v;
+            });
+            final updateTask = task.map((e) => e.toMap()).toList();
+            final allData = PreferencesServer().getString('tasks');
+            if (allData != null) {
+              List<dynamic> allDataList = (jsonDecode(allData) as List).map((
+                e,
+              ) {
+                return TaskModel.fromJson(e);
+              }).toList();
+              final newIndex = allDataList.indexWhere(
+                (e) => e.id == task[index].id,
+              );
+              allDataList[newIndex] = task[index];
+              await PreferencesServer().setString(
+                'tasks',
+                jsonEncode(allDataList.map((e) => e.toMap()).toList()),
+              );
+              loadTasK();
+            }
+          },
+          onDelet: (int id) {
+            deleteTask(id);
+          }, edit: () {
+            loadTasK();
+          },
         ),
+      ),
     );
   }
 }
