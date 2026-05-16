@@ -9,7 +9,7 @@ import 'package:tasky_app/core/theme/theme_controller.dart';
 import 'package:tasky_app/core/utils/constant/app_colors.dart';
 import 'package:tasky_app/core/utils/constant/constant.dart';
 import 'package:tasky_app/core/widgets/custom_app_bar.dart';
-import 'package:tasky_app/feature/user_details_view.dart';
+import 'package:tasky_app/feature/profile/presentation/view/user_details_view.dart';
 import 'package:tasky_app/feature/welcome/presentation/views/welcome_view.dart';
 
 class ProfileView extends StatefulWidget {

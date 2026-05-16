@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tasky_app/core/utils/constant/app_colors.dart';
-import 'package:tasky_app/feature/complete_view.dart';
+import 'package:tasky_app/feature/tasks/presentation/views/complete_view.dart';
 import 'package:tasky_app/feature/home/presentation/views/home_view.dart';
-import 'package:tasky_app/feature/profile_view.dart';
-import 'package:tasky_app/feature/todo_view.dart';
+import 'package:tasky_app/feature/profile/presentation/view/profile_view.dart';
+import 'package:tasky_app/feature/tasks/presentation/views/todo_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});

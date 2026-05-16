@@ -37,9 +37,7 @@ class WelcomeBottomSection extends StatelessWidget {
           ),
           const Gap(24),
           CustomElevetedButton(
-          
             title: 'Let’s Get Started',
-            
             onPressed: () async {
               if (formKey.currentState!.validate()) {
                 await PreferencesServer().setString(
