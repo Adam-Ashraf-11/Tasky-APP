@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tasky_app/core/services/Preferences_server.dart';
+import 'package:tasky_app/core/utils/constant/constant.dart';
 import 'package:tasky_app/core/widgets/custom_app_bar.dart';
 import 'package:tasky_app/core/widgets/custom_tasks_list_view.dart';
 import 'package:tasky_app/feature/home/data/models/task_model.dart';
@@ -22,7 +23,7 @@ class _CompleteViewState extends State<CompleteView> {
 
   deleteTask(int? id) async {
     List<dynamic> ctasks = [];
-       final getTask = PreferencesServer().getString('tasks');
+       final getTask = PreferencesServer().getString(cTasks);
     if (getTask != null) {
       
       final taskDeCoded  = jsonDecode(getTask)as List<dynamic>;
@@ -34,7 +35,7 @@ class _CompleteViewState extends State<CompleteView> {
         compeletetasks.removeWhere((element) => element.id == id);
       });
       final updateTask = ctasks.map((e) => e.toMap()).toList();
-      await PreferencesServer().setString('tasks', jsonEncode(updateTask));
+      await PreferencesServer().setString(cTasks, jsonEncode(updateTask));
       
      }
   }
@@ -55,7 +56,7 @@ class _CompleteViewState extends State<CompleteView> {
             setState(() {
               compeletetasks[index].isDone = v;
             });
-            final allData = PreferencesServer().getString('tasks');
+            final allData = PreferencesServer().getString(cTasks);
             if (allData != null) {
               List<dynamic> allDataList = (jsonDecode(allData) as List).map((
                 e,
@@ -67,7 +68,7 @@ class _CompleteViewState extends State<CompleteView> {
               );
               allDataList[newIndex] = compeletetasks[index];
               await PreferencesServer().setString(
-                'tasks',
+                cTasks,
                 jsonEncode(allDataList.map((e) => e.toMap()).toList()),
               );
               loadTasK();
@@ -83,7 +84,7 @@ class _CompleteViewState extends State<CompleteView> {
 
   //! load task method
   void loadTasK() async {
-    final getTask = PreferencesServer().getString('tasks');
+    final getTask = PreferencesServer().getString(cTasks);
     if (getTask != null) {
       final taskDeCoded = jsonDecode(getTask);
       setState(() {

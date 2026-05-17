@@ -167,7 +167,7 @@ class _ProfileViewState extends State<ProfileView> {
                 onTap: () async {
                   await PreferencesServer().remove(cUserName);
                   await PreferencesServer().remove(cMotivation);
-                  await PreferencesServer().remove('tasks');
+                  await PreferencesServer().remove(cTasks);
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:tasky_app/core/services/Preferences_server.dart';
+import 'package:tasky_app/core/utils/constant/constant.dart';
 import 'package:tasky_app/core/widgets/custom_eleveted_button.dart';
 import 'package:tasky_app/core/widgets/custom_text_form_feild.dart';
 import 'package:tasky_app/feature/home/data/models/task_model.dart';
@@ -87,7 +88,7 @@ class _NewTaskViewBodyState extends State<NewTaskViewBody> {
               title: 'Add Task',
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                  final taskJson = PreferencesServer().getString('tasks');
+                  final taskJson = PreferencesServer().getString(cTasks);
                   List<dynamic> listTasks = [];
                   if (taskJson != null) {
                     listTasks = jsonDecode(taskJson);
@@ -102,7 +103,7 @@ class _NewTaskViewBodyState extends State<NewTaskViewBody> {
 
                   listTasks.add(taskModel.toMap()); // listTasks.add(task);
                   final taskEncode = jsonEncode(listTasks);
-                  await PreferencesServer().setString('tasks', taskEncode);
+                  await PreferencesServer().setString(cTasks, taskEncode);
                   Navigator.pop(context, true);
                 }
               },

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:tasky_app/core/services/Preferences_server.dart';
 import 'package:tasky_app/core/utils/constant/constant.dart';
@@ -7,14 +6,11 @@ import 'package:tasky_app/feature/home/data/models/task_model.dart';
 
 class HomeController with ChangeNotifier {
   String? userName;
-
   List<dynamic> task = [];
   String? userImage;
   int completedTasks = 0;
   int allTasks = 0;
   int percentage = 0;
-
- 
 
   init() {
     addUserData();
@@ -25,18 +21,17 @@ class HomeController with ChangeNotifier {
   void addUserData() async {
     userName = PreferencesServer().getString(cUserName);
     userImage = PreferencesServer().getString(cUserImage);
-
     notifyListeners();
   } //usernam
 
   //! load task method
   void loadTasK() async {
-    final getTask = PreferencesServer().getString('tasks');
+    final getTask = PreferencesServer().getString(cTasks);
     if (getTask != null) {
       final taskDeCoded = jsonDecode(getTask);
-
       task = taskDeCoded.map((e) => TaskModel.fromJson(e)).toList();
       calculatePercentage();
+      notifyListeners();
     }
   }
 
@@ -55,18 +50,17 @@ class HomeController with ChangeNotifier {
     task[index].isDone = v;
     calculatePercentage();
     final updateTask = task.map((e) => e.toMap()).toList();
-    await PreferencesServer().setString('tasks', jsonEncode(updateTask));
+    await PreferencesServer().setString(cTasks, jsonEncode(updateTask));
     notifyListeners();
   }
 
   // ! delete task
   deleteTask(int? id) async {
     if (id == null) return;
-
     task.removeWhere((element) => element.id == id);
     calculatePercentage();
     final updateTask = task.map((e) => e.toMap()).toList();
-    await PreferencesServer().setString('tasks', jsonEncode(updateTask));
+    await PreferencesServer().setString(cTasks, jsonEncode(updateTask));
     notifyListeners();
   }
 }

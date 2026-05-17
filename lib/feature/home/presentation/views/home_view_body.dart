@@ -17,108 +17,114 @@ class HomeViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HomeController>(
       create: (BuildContext context) => HomeController()..init(),
-      child: Consumer<HomeController>(
-        builder: (BuildContext context, HomeController value, Widget? child) {
-          final controller = context.read<HomeController>();
-          return Scaffold(
-            floatingActionButton: CustomFloatingActionButton(
+      child: Scaffold(
+        floatingActionButton: Builder(
+          builder: (BuildContext context) {
+            return CustomFloatingActionButton(
               onPressed: () async {
                 var result = await Navigator.pushNamed(
                   context,
                   NewTaskView.routeName,
                 );
                 if (result == true) {
-                  controller.loadTasK();
+                  context.read<HomeController>().loadTasK();
                 }
               },
               title: 'Add New Task',
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(16),
-              child: CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            );
+          },
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
+                        Selector<HomeController, String?>(
+                          selector: (context, HomeController controller) =>
+                              controller.userImage,
+                          builder: (context, String? userImage, Widget? child) {
+                            return CircleAvatar(
                               radius: 30,
-                              backgroundImage: (value.userImage != null)
-                                  ? FileImage(File(value.userImage!))
+                              backgroundImage: (userImage != null)
+                                  ? FileImage(File(userImage))
                                   : const AssetImage(
                                       'assets/images/Thumbnail.png',
                                     ),
-                            ),
-                            const Gap(10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Good Evening,${value.userName}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .displayMedium!
-                                      .copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  'One task at a time.One step\n closer.',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .displayMedium!
-                                      .copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const Gap(20),
-                        Text(
-                          '${value.userName} , Your Work is \nalmost Done !',
-                          style: Theme.of(context).textTheme.displayLarge,
-                        ),
-                        const Gap(20),
-                        ArchievedTasks(
-                          allTasks: value.allTasks,
-                          completedTasks: value.completedTasks,
-                          percentage: value.percentage,
-                        ),
-                        const Gap(10),
-                        HighPriorityContainer(
-                          refrash: () => controller.loadTasK(),
-                          tasks: value.task,
-                          onTap: (bool? v, int index) {
-                            controller.doneTask(v, index);
+                            );
                           },
                         ),
                         const Gap(10),
-                        Text(
-                          'My Tasks',
-                          style: Theme.of(context).textTheme.labelLarge,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Selector(
+                              selector: (context, HomeController controller) =>
+                                  controller.userName,
+                              builder:
+                                  (
+                                    BuildContext context,
+                                    String? userName,
+                                    Widget? child,
+                                  ) {
+                                    return Text(
+                                      'Good Evening, $userName',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .displayMedium!
+                                          .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    );
+                                  },
+                            ),
+                            Text(
+                              'One task at a time.One step\n closer.',
+                              style: Theme.of(context).textTheme.displayMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
-                        const Gap(10),
                       ],
                     ),
-                  ),
-                  CustomSliverTasksListView(
-                    tasks: value.task,
-                    onTap: (bool? value, int? index) {
-                      controller.doneTask(value, index!);
-                    },
-                    onDelet: (int? id) {
-                      controller.deleteTask(id);
-                    },
-                    edit: () {
-                      controller.loadTasK();
-                    },
-                  ),
-                ],
+                    const Gap(20),
+                    Selector(
+                      selector: (context, HomeController controller) =>
+                          controller.userName,
+                      builder:
+                          (
+                            BuildContext context,
+                            String? userName,
+                            Widget? child,
+                          ) {
+                            return Text(
+                              '$userName , Your Work is \nalmost Done !',
+                              style: Theme.of(context).textTheme.displayLarge,
+                            );
+                          },
+                    ),
+                    const Gap(20),
+                    const ArchievedTasks(),
+                    const Gap(10),
+                    const HighPriorityContainer(),
+                    const Gap(10),
+                    Text(
+                      'My Tasks',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    const Gap(10),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+              const CustomSliverTasksListView(),
+            ],
+          ),
+        ),
       ),
     );
   }

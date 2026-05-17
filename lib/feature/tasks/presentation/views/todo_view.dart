@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tasky_app/core/services/Preferences_server.dart';
+import 'package:tasky_app/core/utils/constant/constant.dart';
 import 'package:tasky_app/core/widgets/custom_app_bar.dart';
 import 'package:tasky_app/core/widgets/custom_tasks_list_view.dart';
 import 'package:tasky_app/feature/home/data/models/task_model.dart';
@@ -22,7 +23,7 @@ class _TodoViewState extends State<TodoView> {
 
   //! load task method
   void loadTasK() async {
-    final getTask = PreferencesServer().getString('tasks');
+    final getTask = PreferencesServer().getString(cTasks);
     if (getTask != null) {
       final taskDeCoded = jsonDecode(getTask);
       setState(() {
@@ -36,7 +37,7 @@ class _TodoViewState extends State<TodoView> {
 
    deleteTask(int? id) async {
     List<dynamic> tasks = [];
-    final getTask = PreferencesServer().getString('tasks');
+    final getTask = PreferencesServer().getString(cTasks);
     if (getTask != null) {
       final taskDeCoded = jsonDecode(getTask) as List<dynamic>;
       tasks = taskDeCoded.map((e) => TaskModel.fromJson(e)).toList();
@@ -46,7 +47,7 @@ class _TodoViewState extends State<TodoView> {
         todoTasks.removeWhere((element) => element.id == id);
       });
       final updateTask = tasks.map((e) => e.toMap()).toList();
-       PreferencesServer().setString('tasks', jsonEncode(updateTask));
+       PreferencesServer().setString(cTasks, jsonEncode(updateTask));
     }
   }
   @override
@@ -62,7 +63,7 @@ class _TodoViewState extends State<TodoView> {
               setState(() {
                 todoTasks[index].isDone = v ?? false;
               });
-              final allData = PreferencesServer().getString('tasks');
+              final allData = PreferencesServer().getString(cTasks);
               if (allData != null) {
                 List<dynamic> allDataList = (jsonDecode(allData) as List).map((
                   e,
@@ -74,7 +75,7 @@ class _TodoViewState extends State<TodoView> {
                 if (dbIndex != -1) {
                   allDataList[dbIndex].isDone = v ?? false;
                   await PreferencesServer().setString(
-                    'tasks',
+                    cTasks,
                     jsonEncode(allDataList.map((e) => e.toMap()).toList()),
                   );
                 }
