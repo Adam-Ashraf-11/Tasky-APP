@@ -22,7 +22,10 @@ class TasksController with ChangeNotifier {
       tasks = taskDeCoded.map((e) => TaskModel.fromJson(e)).toList();
       todoTasks = tasks.where((element) => !element.isDone).toList();
       compeletetasks = tasks.where((element) => element.isDone).toList();
-   
+       highPriorityTasks = tasks.reversed
+            .where((element) => element.isHighPriority == true)
+            .toList();
+      notifyListeners();
     }
   }
 
@@ -51,10 +54,26 @@ class TasksController with ChangeNotifier {
     // }
   }
 
+
+ void doneHighPriorityTask(bool v, int index) async {
+    highPriorityTasks[index].isDone = v;
+    final indexWhere = tasks.indexWhere((e) => e.id == highPriorityTasks[index].id);
+    tasks[indexWhere] = highPriorityTasks[index];
+    
+    await PreferencesServer().setString(
+      cTasks,
+      jsonEncode(tasks.map((e) => e.toMap()).toList()),
+    );
+    loadTasK();
+    // }
+  }
+
   deleteTask(int? id) async {
     if (id == null) return;
     tasks.removeWhere((element) => element.id == id);
     todoTasks.removeWhere((element) => element.id == id);
+    compeletetasks.removeWhere((element) => element.id == id);
+    highPriorityTasks.removeWhere((element) => element.id == id);
     final updateTask = tasks.map((e) => e.toMap()).toList();
     PreferencesServer().setString(cTasks, jsonEncode(updateTask));
     notifyListeners();
