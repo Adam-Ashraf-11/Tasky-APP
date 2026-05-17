@@ -21,8 +21,8 @@ class TasksController with ChangeNotifier {
       final taskDeCoded = jsonDecode(getTask);
       tasks = taskDeCoded.map((e) => TaskModel.fromJson(e)).toList();
       todoTasks = tasks.where((element) => !element.isDone).toList();
-  
-      notifyListeners();
+      compeletetasks = tasks.where((element) => element.isDone).toList();
+   
     }
   }
 
@@ -30,6 +30,19 @@ class TasksController with ChangeNotifier {
     todoTasks[index].isDone = v;
     final indexWhere = tasks.indexWhere((e) => e.id == todoTasks[index].id);
     tasks[indexWhere] = todoTasks[index];
+
+    await PreferencesServer().setString(
+      cTasks,
+      jsonEncode(tasks.map((e) => e.toMap()).toList()),
+    );
+    loadTasK();
+    // }
+  }
+   void doneCompeleteTask(bool v, int index) async {
+    compeletetasks[index].isDone = v;
+    final indexWhere = tasks.indexWhere((e) => e.id == compeletetasks[index].id);
+    tasks[indexWhere] = compeletetasks[index];
+    
     await PreferencesServer().setString(
       cTasks,
       jsonEncode(tasks.map((e) => e.toMap()).toList()),
