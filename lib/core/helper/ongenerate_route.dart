@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasky_app/feature/home/presentation/views/high_priority_view.dart';
+import 'package:tasky_app/feature/tasks/presentation/views/high_priority_view.dart';
 import 'package:tasky_app/feature/home/presentation/views/home_view.dart';
 import 'package:tasky_app/feature/main_view.dart';
 import 'package:tasky_app/feature/home/presentation/views/new_task_view.dart';

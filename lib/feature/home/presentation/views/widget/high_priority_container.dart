@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tasky_app/core/theme/theme_controller.dart';
 import 'package:tasky_app/core/utils/constant/app_colors.dart';
 import 'package:tasky_app/feature/home/presentation/manager/home_controller.dart';
-import 'package:tasky_app/feature/home/presentation/views/high_priority_view.dart';
+import 'package:tasky_app/feature/tasks/presentation/views/high_priority_view.dart';
 
 class HighPriorityContainer extends StatelessWidget {
   const HighPriorityContainer({
