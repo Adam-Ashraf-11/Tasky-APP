@@ -15,7 +15,7 @@ class HighPriorityView extends StatelessWidget {
     return ChangeNotifierProvider<TasksController>(
       create: (_) => TasksController()..init(),
       builder: (context, _) {
-        final controller = context.watch<TasksController>();
+        final controller = context.read<TasksController>();
         return Scaffold(
           appBar: customAppBar(title: 'High Priority Tasks'),
           body: Padding(
@@ -26,9 +26,10 @@ class HighPriorityView extends StatelessWidget {
             child: Consumer<TasksController>(
               builder: (context, value, child) {
                 return CustomTasksListView(
-                  tasks: value. highPriorityTasks,
-                  onTap: (bool? v, int index) async {
-                   controller.doneHighPriorityTask(v!, index);
+                  tasks: value.highPriorityTasks,
+                  onTap: (bool? v, int index)  {
+                    final taskId= value.highPriorityTasks[index].id;
+                   controller.doneHighPriorityTask(v!, taskId);
                   },
                   onDelet: (int id) {
                    controller. deleteTask(id);

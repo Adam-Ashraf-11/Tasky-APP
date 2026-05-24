@@ -19,7 +19,7 @@ class ThemeController {
     //    themeNotifier.value = ThemeMode.light;
     //  }
   }
-
+  //! toggle Method
  static toggleTheme() async{
     if (themeNotifier.value == ThemeMode.dark) {
       themeNotifier.value = ThemeMode.light;
@@ -29,8 +29,10 @@ class ThemeController {
     await  PreferencesServer().setBool(cTheme, true);
     }
   }
-
+  //! isLight Method
   isLight() => themeNotifier.value == ThemeMode.light;
+
+  //! isDark Method
   isDark() => themeNotifier.value == ThemeMode.dark;
 
 }

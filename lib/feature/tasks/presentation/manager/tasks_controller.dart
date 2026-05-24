@@ -22,14 +22,14 @@ class TasksController with ChangeNotifier {
       tasks = taskDeCoded.map((e) => TaskModel.fromJson(e)).toList();
       todoTasks = tasks.where((element) => !element.isDone).toList();
       compeletetasks = tasks.where((element) => element.isDone).toList();
-       highPriorityTasks = tasks.reversed
-            .where((element) => element.isHighPriority == true)
-            .toList();
+      highPriorityTasks = tasks.reversed
+          .where((element) => element.isHighPriority)
+          .toList();
       notifyListeners();
     }
   }
 
-  void doneTask(bool v, int index) async {
+  void doneTodoTask(bool v, int index) async {
     todoTasks[index].isDone = v;
     final indexWhere = tasks.indexWhere((e) => e.id == todoTasks[index].id);
     tasks[indexWhere] = todoTasks[index];
@@ -41,31 +41,32 @@ class TasksController with ChangeNotifier {
     loadTasK();
     // }
   }
-   void doneCompeleteTask(bool v, int index) async {
+
+  void doneCompeleteTask(bool v, int index) async {
     compeletetasks[index].isDone = v;
-    final indexWhere = tasks.indexWhere((e) => e.id == compeletetasks[index].id);
+    final indexWhere = tasks.indexWhere(
+      (e) => e.id == compeletetasks[index].id,
+    );
     tasks[indexWhere] = compeletetasks[index];
-    
     await PreferencesServer().setString(
       cTasks,
       jsonEncode(tasks.map((e) => e.toMap()).toList()),
     );
     loadTasK();
-    // }
   }
 
-
- void doneHighPriorityTask(bool v, int index) async {
-    highPriorityTasks[index].isDone = v;
-    final indexWhere = tasks.indexWhere((e) => e.id == highPriorityTasks[index].id);
-    tasks[indexWhere] = highPriorityTasks[index];
-    
-    await PreferencesServer().setString(
-      cTasks,
-      jsonEncode(tasks.map((e) => e.toMap()).toList()),
+  void doneHighPriorityTask(bool v, int id) async {
+    final indexWhere = tasks.indexWhere(
+      (e) => e.id == id,
     );
-    loadTasK();
-    // }
+    if (indexWhere != -1) {
+      tasks[indexWhere].isDone= v;
+      await PreferencesServer().setString(
+        cTasks,
+        jsonEncode(tasks.map((e) => e.toMap()).toList()),
+      );
+      loadTasK();
+    }
   }
 
   deleteTask(int? id) async {

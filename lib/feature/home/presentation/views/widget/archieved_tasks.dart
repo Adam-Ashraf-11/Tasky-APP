@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
@@ -8,16 +7,7 @@ import 'package:tasky_app/core/utils/constant/app_colors.dart';
 import 'package:tasky_app/feature/home/presentation/manager/home_controller.dart';
 
 class ArchievedTasks extends StatelessWidget {
-  const ArchievedTasks({
-    super.key,
-    // required this.allTasks,
-    // required this.completedTasks,
-    // required this.percentage,
-  });
-  // final int allTasks;
-  // final int completedTasks;
-  // final int percentage;
-
+  const ArchievedTasks({super.key});
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeController>(
@@ -45,7 +35,7 @@ class ArchievedTasks extends StatelessWidget {
                   ),
                   const Gap(4),
                   Text(
-                    '${controller.completedTasks} Out of ${ controller.allTasks} Done',
+                    '${controller.completedTasks} Out of ${controller.allTasks} Done',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],
@@ -57,19 +47,19 @@ class ArchievedTasks extends StatelessWidget {
                     width: 48,
                     height: 48,
                     child: Transform.rotate(
-                      angle: controller. percentage * pi / 100,
+                      angle: controller.percentage * pi / 100,
                       child: CircularProgressIndicator(
                         valueColor: const AlwaysStoppedAnimation<Color>(
                           AppColors.green,
                         ),
-                        value: controller. percentage  / 100, // دائرة كاملة
+                        value: controller.percentage / 100, // دائرة كاملة
                         strokeWidth: 6,
                         backgroundColor: Colors.grey,
                       ),
                     ),
                   ),
                   Text(
-                    '${controller. percentage}%',
+                    '${controller.percentage}%',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],

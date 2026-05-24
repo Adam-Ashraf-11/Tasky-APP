@@ -12,16 +12,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PreferencesServer().init();
   String? savedUserName = PreferencesServer().getString(cUserName);
-
   ThemeController().init();
-
   runApp(TakyApp(userName: savedUserName));
 }
-
 class TakyApp extends StatelessWidget {
   const TakyApp({super.key, required this.userName});
   final String? userName;
   @override
+  
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: ThemeController.themeNotifier,

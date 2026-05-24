@@ -33,6 +33,7 @@ class AddNewTaskController with ChangeNotifier {
       await PreferencesServer().setString(cTasks, taskEncode);
       Navigator.pop(context, true);
     }
+    notifyListeners();
   }
 
   void toogle(bool value) {

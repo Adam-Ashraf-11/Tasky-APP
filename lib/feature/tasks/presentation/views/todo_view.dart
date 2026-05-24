@@ -27,7 +27,7 @@ class TodoView extends StatelessWidget {
                   return CustomTasksListView(
                     tasks: value.todoTasks,
                     onTap: (bool? v, int index) {
-                      controller.doneTask(v!, index);
+                      controller.doneTodoTask(v!, index);
                     },
                     onDelet: (int? id) {
                       controller.deleteTask(id);
